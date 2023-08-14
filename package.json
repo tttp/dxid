@@ -1,0 +1,27 @@
+{
+  "name": "dxid",
+  "version": "1.0.0",
+  "description": "developer friendly way to display an id (db primary key), with a checksum and often more compact",
+  "main": "index.js",
+  "bin": "./index.js",
+  "scripts": {
+    "id": "./index.js",
+    "test": "test/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tttp/dxid.git"
+  },
+  "keywords": [
+    "id",
+    "luhn",
+    "base64",
+    "uuid"
+  ],
+  "author": "xavier dutoit",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tttp/dxid/issues"
+  },
+  "homepage": "https://github.com/tttp/dxid#readme"
+}
