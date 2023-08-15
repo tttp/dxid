@@ -1,11 +1,12 @@
 {
   "name": "dxid",
   "version": "1.0.0",
-  "description": "developer friendly way to display an id (db primary key), with a checksum and often more compact",
+  "description": "A better and safer way to display your primary keys in urls or to the users",
   "main": "index.js",
   "bin": "./index.js",
   "scripts": {
     "id": "./index.js",
+    "dxid": "./index.js",
     "test": "test/index.js"
   },
   "repository": {

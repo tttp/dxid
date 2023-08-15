@@ -16,7 +16,6 @@ for (let i = 0; i < base64Chars.length; i++) {
 }
 
 const luhn64 = (base64url) => {
-  //  const base64Chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
   let sum = 0;
 
   // worth testing first?  if (/[^A-Za-z0-9-_]+/.test(base64url)) return false;
@@ -39,9 +38,9 @@ const luhn64 = (base64url) => {
 
 // number to base64
 const _encode = (number) => {
+
   let lo = number >>> 0;
   let hi = (number / 4294967296) >>> 0; // 2^32
-
   let right = ""; // dealing with numbers > 2^32
   while (hi > 0) {
     right = b2s[0x3f & lo] + right;
@@ -69,21 +68,29 @@ const _decode = (base64) => {
   return number;
 };
 
-const encode = (number) => {
-  const payload = _encode(number);
+const stringify = (number) => {
+  if (number < 1)  { 
+    throw new RangeError("The id must be a positive number");
+  }
+  if (!Number.isSafeInteger(number -1)) { // todo implement differently without bitshift >>>
+     throw new RangeError("The id must be smaller than safe integer <"+Number.MAX_SAFE_INTEGER );;
+  }
+  const payload = _encode(number -1);
   return luhn64(payload) + payload;
 };
 
-const decode = (base64) => {
+const parse = (base64) => {
   const checksum = base64[0];
   const payload = base64.slice(1);
   
-  if (luhn64(payload) !== checksum) return false;
-  return _decode(payload);
+  if (luhn64(payload) !== checksum) {
+    throw new RangeError("invalid dxid");
+  }
+  return _decode(payload) + 1;
 };
 
 module.exports = {
   luhn64,
-  encode,
-  decode,
+  stringify,
+  parse,
 };
