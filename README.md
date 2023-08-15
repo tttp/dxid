@@ -6,14 +6,19 @@ dxid is a display format that is usually more compact and includes a checksum to
 
 for instance (using the cli):
 
-    $npx xdid 1984 -> ke_
-    $npx xdid 42 -> Xp
+    $npx dxid 1984 -> ke_
+    $npx dxid 42 -> Xp
 
-it is filename and url safe so you can use it either to display to the end user, in a url or as as filename (eg cache).
+it is filename and url safe so you can use it either to display to the end user, in a url or as as filename (ie. cache).
 
-This repository contains an implementation in javascript with no dependency that can be used either as a library or as a cli, and you are encouraged to implement it on your favourite language.
+This repository contains an implementation in javascript with no dependency that can be used either as a library or as a cli, and you are encouraged to implement it in your favourite language.
 
 ## usage
+
+    const { stringify, parse } = require("./src/dxid.js");
+    console.log(stringify(1984)); // ke_
+    console.log(parse("ke_")); // 1984
+    console.log(parse("ek_")); // throw RangeError
 
 ## problems we are trying to solve
 
