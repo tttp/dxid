@@ -79,11 +79,13 @@ const stringify = (number) => {
   return luhn64(payload) + payload;
 };
 
-const parse = (base64) => {
+const parse = (base64, throwError) => {
   const checksum = base64[0];
   const payload = base64.slice(1);
   
   if (luhn64(payload) !== checksum) {
+    if (throwError === false) 
+      return false;
     throw new RangeError("invalid dxid");
   }
   return _decode(payload) + 1;

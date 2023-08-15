@@ -1,24 +1,25 @@
-# dxid A better and safer way to display your primary keys in urls or to the users
+# 🆔 A better and safer way to display your primary keys in urls or to the users
 
 In a relational database, the "ID column" is used to uniquely identify each row in a table. This column is often referred to as a primary key column and it's used to establish relationships between tables, enforce data integrity, and optimize query performance. 
 
-dxid is a display format that is usually more compact and includes a checksum to prevent any errors when as developers we type it.
+dxid is a _display_ format that is usually more compact than displaying that id as number while containing a checksum to prevent any errors when as developers we type this id.
 
 for instance (using the cli):
 
     $npx dxid 1984 -> ke_
     $npx dxid 42 -> Xp
 
-it is filename and url safe so you can use it either to display to the end user, in a url or as as filename (ie. cache).
+There is no risk of collision: one id has one and one only dxid and vice versa. it is filename and url safe so you can use it either to display to the end user, in a url or as as filename (eg. for a cache).
 
 This repository contains an implementation in javascript with no dependency that can be used either as a library or as a cli, and you are encouraged to implement it in your favourite language.
 
 ## usage
 
-    const { stringify, parse } = require("./src/dxid.js");
+    const { stringify, parse } = require("dxid");
     console.log(stringify(1984)); // ke_
     console.log(parse("ke_")); // 1984
     console.log(parse("ek_")); // throw RangeError
+    console.log(parse("ek_", false)); // return false (or the id if valid)
 
 ## problems we are trying to solve
 
@@ -51,8 +52,10 @@ dxid includes a checksum too, but because each character contains more informati
 
 We have used two safe and common algorithms:
 
-- the number is encoded using base64url (so xdid can be used without encoding in your url)
+- the number is first encoded using base64url (so xdid can be used without encoding in your url)
 - it's prefixed with a checksum, the [luhn mode 64](https://en.wikipedia.org/wiki/Luhn_mod_N_algorithm) of the encoded id
+
+To keep the dxid short, we only base64 encode the significant bits, it's similar than writing 42 instead of 00000042.
 
 luhn code is what is used on your credit card checksum for instance. It detect all single-digit errors, as well as almost all transpositions of adjacent digits, and is very simple to implement.
 
@@ -60,7 +63,7 @@ luhn code is what is used on your credit card checksum for instance. It detect a
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated.
 
-I would love to have someone implementing it as a postgresql or mysql function, that would make it easier to use in pretty much all applications, but any implementation in any language is welcome.
+I would love to have someone implementing it as a postgresql or mysql function, that would make it easier to use in pretty much every applications, but any implementation in any language is welcome.
 
 If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement". Don't forget to give the project a star! Thanks again!
 
