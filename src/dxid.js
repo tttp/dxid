@@ -17,22 +17,34 @@ for (let i = 0; i < base64Chars.length; i++) {
 
 const luhn64 = (base64url) => {
   let sum = 0;
-
-  // worth testing first?  if (/[^A-Za-z0-9-_]+/.test(base64url)) return false;
+  let isDouble = true; // Start with the rightmost digit being doubled
+  
   for (let i = base64url.length - 1; i >= 0; i--) {
     const char = base64url.charAt(i);
-
+    if (char === '=') {
+      continue; // Skip padding characters
+    }
+    
     const charIndex = base64Chars.indexOf(char);
     if (charIndex === -1) {
-      return false;
+      throw new Error('Invalid base64 character: ' + char);
     }
-
-    let digit = i % 2 ? (charIndex * 2) % 64 : charIndex;
+    
+    let digit = charIndex;
+    
+    if (isDouble) {
+      digit *= 2;
+      if (digit > 63) {
+        digit -= 63;
+      }
+    }
+    
     sum += digit;
+    isDouble = !isDouble;
   }
-
+  
   const luhnDigit = (64 - (sum % 64)) % 64;
-  //const luhnDigit = sum % 64;
+  
   return base64Chars[luhnDigit];
 };
 
@@ -72,8 +84,8 @@ const stringify = (number) => {
   if (number < 1)  { 
     throw new RangeError("The id must be a positive number");
   }
-  if (!Number.isSafeInteger(number -1)) { // todo implement differently without bitshift >>>
-     throw new RangeError("The id must be smaller than safe integer <"+Number.MAX_SAFE_INTEGER );;
+  if (!Number.isSafeInteger(number)) {
+     throw new RangeError("The id must be smaller than safe integer <"+Number.MAX_SAFE_INTEGER );
   }
   const payload = _encode(number -1);
   return luhn64(payload) + payload;
@@ -91,8 +103,11 @@ const parse = (base64, throwError) => {
   return _decode(payload) + 1;
 };
 
-module.exports = {
+/*module.exports = {
   luhn64,
   stringify,
   parse,
 };
+*/
+
+export { luhn64, stringify, parse};

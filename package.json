@@ -1,13 +1,13 @@
 {
   "name": "dxid",
-  "version": "1.0.1",
+  "version": "1.2.0",
   "description": "A better and safer way to display your primary keys in urls or to the users",
   "main": "index.js",
   "bin": "./index.js",
   "scripts": {
     "id": "./index.js",
     "dxid": "./index.js",
-    "test": "test/index.js"
+    "test": "ava"
   },
   "repository": {
     "type": "git",
@@ -20,9 +20,13 @@
     "uuid"
   ],
   "author": "xavier dutoit",
+"type": "module",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/tttp/dxid/issues"
   },
-  "homepage": "https://github.com/tttp/dxid#readme"
+  "homepage": "https://github.com/tttp/dxid#readme",
+  "devDependencies": {
+    "ava": "^5.3.1"
+  }
 }

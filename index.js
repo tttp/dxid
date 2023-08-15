@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const { stringify, parse } = require("./src/dxid.js");
+import { stringify, parse } from "./src/dxid.js";
 
 const argv = process.argv.slice(2);
 if (argv.length !== 1) {
