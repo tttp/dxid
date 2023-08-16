@@ -12,6 +12,7 @@ test('parse properly some dxid', t => {
 });
 
 test('parse invalid dxid(s) throw errors', t => {
+	t.throws(() => parse('A'), {instanceOf: RangeError});
 	t.throws(() => parse('AB'), {instanceOf: RangeError});
 	t.throws(() => parse('AB', true), {instanceOf: RangeError});
 	t.throws(() => parse('AB', 'whatever'), {instanceOf: RangeError});
