@@ -48,9 +48,17 @@ luhn code is what is used on your credit card checksum for instance. It detect a
 
 We chose to puts the checksum as the first digit (it's more common as the last one), so if you use it to generate filenames, it's going to be better distributed and as a way to prevent sequential numbers, for no real reason except to hide a bit the orders of the ids (so lower dxid isn't necessarily older).
 
-## Security
+dxid length:
+- 3 up to id 1023
+- 4 up to id 32'767
+- 5 up to id 1'048'575
+- max 12 (if you are encoding the id as number in javascript, up to nine quadrillion ids)
+
+## Security and pitfalls
 
 Using dxid instead of a number as the representation of the ID is **not increasing security**. knowing one dxid, it's trivial to find the ids below or above; do not use it thinking it will prevent users to access other records, you should enforce it otherwise (either authentication and ACL or with a cryptographic secure hash).
+
+some dxid do look like a number, either positive: _700,501,302,103_ negatives: _-04,-23,-42_ or hex: _0xcd,0xfc,0x01_. There are 4507 dxid that looks like a number in the 10 million ids.
 
 ## Longer rambling on why numbers aren't ideal as IDs.
 
@@ -73,7 +81,7 @@ As frontend dev, you probably displayed a screen that worked great with a tiny i
 
 As backend dev, you might have had to query directly the database with a "select ... where id = 3245082357", or update or delete and hoping you copy pasted the right id. 
 
-## word have meaning too, more rambling
+## Words have meaning too, more rambling
 
 Putting together a bunch of letters is likely to end up with existing words. To prevent that, we removed all voyels from our base of acceptable digits.
 

@@ -100,6 +100,9 @@ export const stringify = (number) => {
   if (!Number.isSafeInteger(number)) {
     throw new RangeError(`The id must be smaller than safe integer <${Number.MAX_SAFE_INTEGER}`);
   }
+  if (number < 0) {
+    throw new RangeError(`The id must be positive`);
+  }
   const payload = encode32 (number);
   return luhn32(payload).toLowerCase() + payload.toLowerCase();
 };
