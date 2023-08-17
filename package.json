@@ -43,6 +43,7 @@
     "ava": "^5.3.1",
     "esbuild": "^0.19.2",
     "eslint": "^8.47.0",
-    "eslint-config-airbnb-base": "^15.0.0"
+    "eslint-config-airbnb-base": "^15.0.0",
+    "naughty-words": "^1.2.0"
   }
 }

@@ -35,6 +35,7 @@
 // convert to and from base32 inspired by number-to-base32 (MIT)
 const base32Chars = '0123456789abcdefghjkmnpqrstvwxyz'
 const alias = { o:0, i:1, l:1, s:5 }
+const profane = [10634,10901,11021,344746,367080936657550];
 
 // binary to string lookup table
 const b2s = base32Chars.split('');

@@ -10,9 +10,9 @@ To prevent errors, long numbers like credit cards, social insurance numbers, IBA
 
 for instance (using the cli):
 
-    $npx dxid 1984 -> je_
-    $npx dxid 42 -> tp
-    $npx dxid 1234567898765432 -> QEYtU9Dph3
+    $npx dxid 1984 -> 01y0
+    $npx dxid 42 -> b1a
+    $npx dxid 1234567898765432 -> r132tmygx63r
 
 It can be displayed where you would display the number, can be used in a url (without needing url encoding) or as as filename (eg. for a cache).
 
@@ -21,23 +21,23 @@ This repository contains an implementation in javascript with no dependency that
 ## usage
 
     import { stringify, parse } from "dxid";
-    console.log(stringify(1984)); // ke_
-    console.log(parse("je_")); // 1984
-    console.log(parse("ej_")); // throw RangeError
-    console.log(parse("ej_", false)); // return false (or the id if valid)
+    console.log(stringify(1984)); // 01y0
+    console.log(parse("01y0")); // 1984
+    console.log(parse("10y0")); // throw RangeError
+    console.log(parse("10y0", false)); // return false (or the id if valid)
 
 as the code base is tiny, you can also import everything
 
     import dxid from "dxid";
-    console.log(dxid.stringify(1984)); // ke_
-    console.log(dxid.parse("je_")); // 1984
+    console.log(stringify(1984)); // 01y0
+    console.log(parse("01y0")); // 1984
 
 
 ## implementation
 
 We have used two safe and common algorithms:
 
-- the number is first encoded using [base32](https://www.crockford.com/base32.html) with symbols that are url safe and prevents confusion (ilo are removed as visually close to 110)
+- the number is first encoded using [base32](https://www.crockford.com/base32.html) with symbols that are url safe and prevents confusion (IlO are removed as visually close to 110)
 - it's prefixed with a checksum, the [luhn mode 64](https://en.wikipedia.org/wiki/Luhn_mod_N_algorithm) of the encoded id
 To keep the dxid short, we only base64 encode the significant bits, it's similar than writing 42 instead of 00000042.
 
@@ -81,8 +81,16 @@ Putting together a bunch of letters is likely to end up with existing words in e
 
 We can't deal with that in the same way car plate numbers do (we can't ban numbers), but [RFC 3986](http://www.ietf.org/rfc/rfc3986.txt) defines : ALPHA  DIGIT  "-" / "." / "\_" / "~" as safe characters, so in theory, we could ignore . and ~ in the dxid and springle them in the dxid if needed.
 
-Testing a list of profane words (banned by google), we have 2 profane numbers.
+Testing a list of profane words (banned by google), we have 2 profane numbers, that we harcoded to include a "-"
 
+    $npx dxid 10901 -> da-mn
+    $npx dxid 11021 -> ta-rd
+
+using a [list with more language](https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words), we have 3 extra:
+
+- 10634 ca- ca
+- 344746 ca-gna
+- 367080936657550 gadve-rdamme
 
 
 ## Contributing
