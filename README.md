@@ -9,6 +9,7 @@ To prevent errors, long numbers like credit cards, social insurance numbers, IBA
 **dxid** is a _display_ format that is more compact than displaying your id as number while containing a checksum to prevent any errors when as developers we type this id.
 
 for instance (using the cli):
+
     $npx dxid 1984 -> bc8b
     $npx dxid 42 -> pcn
     $npx dxid 1234567898765432 -> 2cfd4_8v7jf2
@@ -45,7 +46,7 @@ We have used two safe and common algorithms:
 
 luhn code is what is used on your credit card checksum for instance. It detect all single-digit errors, as well as almost all transpositions of adjacent digits.
 
-We chose to puts the checksum as the first digit (it's more common as the last one) as a way to prevent sequential numbers, for no real reason except to hide a bit the orders of the ids (so lower dxid isn't necessarily older).
+We chose to puts the checksum as the first digit (it's more common as the last one), so if you use it to generate filenames, it's going to be better distributed and as a way to prevent sequential numbers, for no real reason except to hide a bit the orders of the ids (so lower dxid isn't necessarily older).
 
 ## Security
 
@@ -74,10 +75,9 @@ As backend dev, you might have had to query directly the database with a "select
 
 ## word have meaning too, more rambling
 
-Putting together a bunch of letters is likely to end up with existing words. To prevent that, we removed all voyels from our base of used chars.
+Putting together a bunch of letters is likely to end up with existing words. To prevent that, we removed all voyels from our base of acceptable digits.
 
-
-We can't deal with that in the same way car plate numbers do (we can't ban numbers), but [RFC 3986](http://www.ietf.org/rfc/rfc3986.txt) defines : ALPHA  DIGIT  "-" / "." / "\_" / "~" as safe characters, so in theory, we could ignore . and ~ in the dxid and springle them in the dxid if needed. We only kept "." as accepted separator
+We kept "." as a char you can put anywhere in the dxid to make it easier to read/type: they are ignored while converting dxid to a number and you can springle them in the dxid if you want to. 
 
 Testing a list of profane words (banned by google), we have 0 profane numbers.
 
@@ -85,7 +85,7 @@ using a [list with 28 languages](https://github.com/LDNOOBW/List-of-Dirty-Naught
 
 When removing &, replacing space by either "-" or "\_" and doing common substibutions i->1 e->3 o->0, we finally managed to generate 24: _sm l0rt d1ck s3x0 p0p3l b1tch 1ng010 3r0t1c p0kk3r f1g0n3 schl0ng t0pl3ss r1mm1ng p3nd3j0 bl0w-j0b 0pr0tt3n b0ll0cks g00_g1rl sch13ss3r m1nch10n3 gr3pp3ld3l h0w-t0-k1ll l13fd3sgr0t_
 
-I'd say that finding [b1tch](https://www.merriam-webster.com/dictionary/bitch) offensive is [b0ll0cks](https://www.merriam-webster.com/dictionary/bollocks), but you can always write 769061 as b1t.ch and 23899866350 as b0l.l0.cks
+I'd say that finding [b1tch](https://www.merriam-webster.com/dictionary/bitch) offensive is [b0ll0cks](https://www.merriam-webster.com/dictionary/bollocks), but you can always write 769061 as b1t.ch and 23899866350 as b0ll.0cks if you prefer.
 
 ## Contributing
 
