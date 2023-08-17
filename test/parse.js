@@ -2,10 +2,10 @@ import test from 'ava';
 import { parse } from '../src/dxid.js';
 
 test('parse properly some dxid', (t) => {
-  t.is(parse('y1'), 1);
-  t.is(parse('b1a'), 42);
-  t.is(parse('01y0'), 1984);
-  t.is(parse('w7zzzzzzzzzz'), Number.MAX_SAFE_INTEGER);
+  t.is(parse('8C'), 1);
+  t.is(parse('PCN'), 42);
+  t.is(parse('BC8B'), 1984);
+  t.is(parse('6K9999999999'), Number.MAX_SAFE_INTEGER);
 });
 
 test('parse invalid dxid(s) throw errors', (t) => {
@@ -17,7 +17,7 @@ test('parse invalid dxid(s) throw errors', (t) => {
 });
 
 test('parse invalid dxid(s) with throwError===false returns false', (t) => {
-  t.false(parse('AC', false));
-  t.truthy(parse('y1', false));
-  t.is(parse('b1a', false), 42);
+  t.false(parse('BCD', false));
+  t.truthy(parse('BC8B', false));
+  t.is(parse('PCN', false), 42);
 });

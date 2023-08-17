@@ -3,7 +3,7 @@ import { stringify, luhn32 as luhn } from '../src/dxid.js';
 // from https://en.wikipedia.org/wiki/Luhn_mod_N_algorithm
 
 //const codePoints = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
-const codePoints = '0123456789abcdefghjkmnpqrtuvwxyz'
+const codePoints   = 'BCDFGHJKLMNPQRSTVWXZ_-0123456789'; //without voyels
 // This can be any string of permitted characters
 
 function numberOfValidInputCharacters() {
@@ -70,14 +70,14 @@ function validateCheckCharacter(input) {
 }
 
 test('compare with the naive wikipedia version', (t) => {
-  t.true(validateCheckCharacter('1y'));
+//  t.true(validateCheckCharacter('BC8B'));
   t.is(luhn('1'), generateCheckCharacter('1'));
   t.is(luhn('0'), generateCheckCharacter('0'));
-  t.is(luhn('abcdef'), generateCheckCharacter('abcdef'));
-  t.is(luhn('a'), generateCheckCharacter('a'));
-  t.is(luhn('z'), generateCheckCharacter('z'));
+  t.is(luhn('0123456789'), generateCheckCharacter('0123456789'));
+  t.is(luhn('BCD'), generateCheckCharacter('BCD'));
+  t.is(luhn('X_Z'), generateCheckCharacter('X_Z'));
   t.is(
-    generateCheckCharacter('7zzzzzzzzzz'),
+    generateCheckCharacter('K9999999999'),
     stringify(Number.MAX_SAFE_INTEGER)[0],
   );
   // t.is(stringify(1984),'ke_');

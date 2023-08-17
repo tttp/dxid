@@ -4,29 +4,21 @@ import { luhn32 as luhn, parse,stringify } from "./src/dxid.js";
 const profaneID = new Set();
 const extrabw = ["damn","tard"];
 
-const best = (words) => { // with minimal upper/lowercase
-  const countUppercaseChars = (s) => {
-    const up = s.split('').reduce((count, char) => char === char.toUpperCase() ? count + 1 : count, 0);
-    up > s.length/2 ? s.length-up : up;
-  }
-  const ordered = words.sort((a, b) => countUppercaseChars(a) - countUppercaseChars(b));
-  return ordered [0];
-}
-
 
 const readable = word => {
   const check = (part,checksum) => {
     const cs = luhn(part);
+console.log(cs,part);
     if (cs === checksum)
       profaneID.add(parse(cs+part));
   }
 
   const upper = word[0].toUpperCase();
   const lower = word[0].toLowerCase();
-  const input = word.substring(1).toLowerCase();
+  const input = word.substring(1);//.toUpperCase();
   check (input,lower);
   check (input,upper);
-  check (input.toUpperCase(),upper);
+  check (input,upper);
 }
 
 const permute = word => {
@@ -64,7 +56,7 @@ const permute = word => {
     const d = word.trim().replaceAll(' ','-');
     const length = d.length;
     if (length > 12) return; //dcid max 12
-    bw[length].push(d);
+    bw[length].push(d.toUpperCase());
   });
   
 
@@ -72,9 +64,10 @@ const permute = word => {
     bw[i].forEach((d) => { 
       if (!d) return;
       try {
-        permute(d);
-        //readable(d);
+        //permute(d);
+        readable(d);
       } catch (e) {
+//console.log(d);
         // words with I L O U aren't dxid
       }
     })

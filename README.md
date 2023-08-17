@@ -2,7 +2,7 @@
 
 In your database, most of the tables have a primary key to give each record a unique number (sequence starting at 1). It's used to establish relationships between tables, enforce data integrity, and optimize query performance. Your computer loves it.
 
-However, when we use that primary key as a (visible) identifier, like your customer number, your account id, your product key... you end up with very long numbers in your documents, apps and urls. Humans and developers don't love it: it's easy to mistype, its length changes every 10 and might break your layout and it makes long and hard to share urls.
+However, when we use that primary key as a (visible) identifier, like your customer number, your account id, your product key... on base 10 (the normal way to write numbers) we end up with very long numbers in your documents, apps and urls. Humans and developers don't love it: it's easy to mistype, its length changes every 10 and might break your layout and it makes long and hard to share urls.
 
 To prevent errors, long numbers like credit cards, social insurance numbers, IBANs and many country ID numbers add an extra check digit (the checksum). It catches most typos, but makes a long number even longer.
 
@@ -38,8 +38,8 @@ as the code base is tiny, you can also import everything
 We have used two safe and common algorithms:
 
 - the number is first encoded using [base32](https://www.crockford.com/base32.html) with symbols that are url safe and prevents confusion (IlO are removed as visually close to 110)
-- it's prefixed with a checksum, the [luhn mode 64](https://en.wikipedia.org/wiki/Luhn_mod_N_algorithm) of the encoded id
-To keep the dxid short, we only base64 encode the significant bits, it's similar than writing 42 instead of 00000042.
+- it's prefixed with a checksum, the [luhn mode 32](https://en.wikipedia.org/wiki/Luhn_mod_N_algorithm) of the encoded id
+To keep the dxid short, we only base32 encode the significant bits, it's similar than writing 42 instead of 00000042.
 
 luhn code is what is used on your credit card checksum for instance. It detect all single-digit errors, as well as almost all transpositions of adjacent digits.
 
@@ -74,23 +74,18 @@ As soon as you help me with writing a postgresl or mysql function, you'll be abl
 
 ## word have meaning too, more rambling
 
-Putting together a bunch of letters is likely to end up with existing words in english or another language, and so...
+Putting together a bunch of letters is likely to end up with existing words. To prevent that, we removed all voyels from our base of used chars.
 
-    $npx dxid 10901 -> damn
-    $npx dxid 11021 -> tard
 
 We can't deal with that in the same way car plate numbers do (we can't ban numbers), but [RFC 3986](http://www.ietf.org/rfc/rfc3986.txt) defines : ALPHA  DIGIT  "-" / "." / "\_" / "~" as safe characters, so in theory, we could ignore . and ~ in the dxid and springle them in the dxid if needed.
 
-Testing a list of profane words (banned by google), we have 2 profane numbers, that we harcoded to include a "-"
+Testing a list of profane words (banned by google), we have 7 profane numbers, that we harcoded to include a "-"
 
     $npx dxid 10901 -> da-mn
     $npx dxid 11021 -> ta-rd
 
 using a [list with more language](https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words), we have 3 extra:
 
-- 10634 ca- ca
-- 344746 ca-gna
-- 367080936657550 gadve-rdamme
 
 
 ## Contributing
@@ -107,7 +102,11 @@ If you have a suggestion that would make this better, please fork the repo and c
 1. Push to the Branch (git push origin feature/AmazingFeature)
 1. Open a Pull Request
 
-## License
+## License and credit
+
+We started with base64url, that made the ids a bit smaller but created a lot of swearwords, so we switched to base32 but instead of using [RFC 4648](https://datatracker.ietf.org/doc/html/rfc4648) using the Croford alphabet, that generates less swear words. Croford suggests to use a simplier mod 37 digits, but:
+- luhn is better at catching permutations
+- it makes sense to use a prime number if the keys are not uniformly distributed, but it isn't our case, and it isn't a useful propery in the first place 
 
 Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
 

@@ -2,40 +2,24 @@
 // current implementation luhn base37
 
 /*
- encode a value with the encoding defined by _Douglas_ _Crockford_ in
- <http://www.crockford.com/wrmg/base32.html>
+ When decoding, upper and lower case letters are accepted, and i will
+ be treated as 1 and o will be treated as 0. 
+ When encoding, only upper case letters are used.
 
- this is *not* the same as the Base32 encoding defined in RFC 4328
 
- The Base32 symbol set is a superset of the Base16 symbol set.
-
- We chose a symbol set of 10 digits and 22 letters. We exclude 4 of the 26
- letters: I L O U.
-
- Excluded Letters
-
- I:: Can be confused with 1
- L:: Can be confused with 1
- O:: Can be confused with 0
- U:: Accidental obscenity
-
- When decoding, upper and lower case letters are accepted, and i and l will
- be treated as 1 and o will be treated as 0. When encoding, only upper case
- letters are used.
-
- If the bit-length of the number to be encoded is not a multiple of 5 bits,
- then zero-extend the number to make its bit-length a multiple of 5.
-
- Hyphens (-) can be inserted into symbol strings. This can partition a
+ underscores (_) can be inserted into symbol strings. This can partition a
  string into manageable pieces, improving readability by helping to prevent
  confusion. Hyphens are ignored during decoding. An application may look for
  hyphens to assure symbol string correctness.
 */
 
 // convert to and from base32 inspired by number-to-base32 (MIT)
-const base32Chars = '0123456789abcdefghjkmnpqrstvwxyz'
-const alias = { o:0, i:1, l:1, s:5 }
-const profane = [10634,10901,11021,344746,367080936657550];
+//const base32Chars = '0123456789abcdefghjkmnpqrstvwxyz'; // croford
+//const base32Chars   = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567'; // rfc 4648
+const base32Chars   = 'BCDFGHJKLMNPQRSTVWXZ_-0123456789'; //without voyels
+
+const alias = { O:0, I:1, E:3 }
+//const profane = [10634,10901,11021,344746,367080936657550];
 
 // binary to string lookup table
 const b2s = base32Chars.split('');
@@ -48,7 +32,8 @@ for (let i = 0; i < base32Chars.length; i++) {
 }
 
 export const normalize = (str) => {
-  str = str.replace(new RegExp('-|_', 'g'), '').toLowerCase();
+  // remove AU or AEIOU (and no alias?
+  str = str.replaceAll('.', '').toUpperCase();
   for (const x in alias) {
     str = str.replace(new RegExp(x, 'g'), alias[x]);
   }
@@ -63,10 +48,9 @@ export const luhn32 = (base32url) => {
 
   for (let i = base32url.length - 1; i >= 0; i--) {
     const char = base32url.charAt(i);
-
     const charIndex = base32Chars.indexOf(char);
     if (charIndex === -1) {
-      throw new Error(`Invalid base32 character: ${char}`);
+      throw new RangeError(`Invalid base32 character: ${char}`);
     }
 
     let digit = charIndex;
@@ -133,17 +117,4 @@ export const parse = (ubase32, throwError) => {
   return decode32(payload);
 };
 
-/* module.exports = {
-  luhn32,
-  stringify,
-  parse,
-};
-*/
-
-//const all = { luhn32, stringify, parse };
-
 export default { luhn32, stringify, parse, encode32, decode32 };
-
-//export {
-//  luhn32, stringify, parse,
-//};
