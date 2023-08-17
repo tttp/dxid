@@ -38,7 +38,7 @@ const permute = (word) => {
 };
 
 test(`testing naughty words dxid`, async (t) => {
-  const known = "sm l0rt d1ck s3x0 p0p3l b1tch 1ng010 3r0t1c p0kk3r f1g0n3 schl0ng t0pl3ss r1mm1ng p3nd3j0 bl0w-j0b 0pr0tt3n b0ll0cks g00_g1rl sch13ss3r m1nch10n3 gr3pp3ld3l h0w-t0-k1ll l13fd3sgr0t";
+  const known = "sm l0rt d1ck s3x0 p0p3l k1nky b1tch 1ng010 3r0t1c p0kk3r f1g0n3 schl0ng t0pl3ss r1mm1ng p3nd3j0 bl0w-j0b 0pr0tt3n kyrv1tys b0ll0cks sch13ss3r m1nch10n3 gr3pp3ld3l h0w-t0-k1ll l13fd3sgr0t";
   let allWords = extrabw;
   t.is(Object.keys(words).length, 28, "how many languages");
 
@@ -79,7 +79,7 @@ test(`testing naughty words dxid`, async (t) => {
     });
   }
 
-  t.is(profaneID.size,24,"profane words found");
+  t.is(profaneID.size,24,"profane words found "+ Array.from(profaneID).join(" "));
   const naughty = [];
   [...profaneID]
     .sort((a, b) => a - b)

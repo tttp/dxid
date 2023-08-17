@@ -12,7 +12,7 @@ for instance (using the cli):
 
     $npx dxid 1984 -> bc8b
     $npx dxid 42 -> pcn
-    $npx dxid 1234567898765432 -> 2cfd4_8v7jf2
+    $npx dxid 1234567898765432 -> 2cfd4z8v7jf2
 
 It can be displayed where you would display the number, can be used in a url (without needing url encoding) or as as filename (eg. for a cache).
 
@@ -39,7 +39,7 @@ We have used two safe and common algorithms:
 
 - the number is first encoded using base32 with 32 symbols that are url safe (no need to encode)
 - it's prefixed with a checksum, the [luhn mode 32](https://en.wikipedia.org/wiki/Luhn_mod_N_algorithm) of the encoded id
-- to remove risks of generating a dxid that looks like a word, we removed all voyels. the 32 chars are *bcdfghjklmnpqrstvwxz_-0123456789*
+- to remove risks of generating a dxid that looks like a word, we removed the most common voyels (aeiou). the 32 chars are *bcdfghjklmnpqrstvwxyz-0123456789*
 - To keep the dxid short, we only base32 encode the significant bits, it's similar than writing 42 instead of 00000042.
 - to make it easier to write long names, you can put "." as a separator anywhere and it will be ignored
 - to make it easier to type, dxid is case insensitive, but always generated as lowercase
@@ -58,7 +58,22 @@ dxid length:
 
 Using dxid instead of a number as the representation of the ID is **not increasing security**. knowing one dxid, it's trivial to find the ids below or above; do not use it thinking it will prevent users to access other records, you should enforce it otherwise (either authentication and ACL or with a cryptographic secure hash).
 
-some dxid do look like a number, either positive: _700,501,302,103_ negatives: _-04,-23,-42_ or hex: _0xcd,0xfc,0x01_. There are 4507 dxid that looks like a number in the 10 million ids.
+it might be unexpected that some dxid do look like a number, either positive: _700,501,302,103_ negatives: _-04,-23,-42_ or hex: _0xcd,0xfc,0x01_.
+
+These are the 10 "ambigous" numbers in the first 1k: _103 122 141 160 212 231 250 302 321 340_. There are 3265 in the first 10 million.
+
+If you want to use the cli to parse or generate automatically dxid, put explicitely the command you want:
+
+    $npx dxid parse 321 -> 791
+    $npx dxid stringify 321 -> znc
+
+otherwise it will exit in error:
+
+    $npx dxid 321 
+    321 can be either an id or a dxid
+    321 ->id 791
+    321 ->dxid znc
+
 
 ## Longer rambling on why numbers aren't ideal as IDs.
 
@@ -91,9 +106,9 @@ Testing a list of profane words (banned by google), we have 0 profane numbers.
 
 using a [list with 28 languages](https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words), we still have 0.
 
-When removing &, replacing space by either "-" or "\_" and doing common substibutions i->1 e->3 o->0, we finally managed to generate 24: _sm l0rt d1ck s3x0 p0p3l b1tch 1ng010 3r0t1c p0kk3r f1g0n3 schl0ng t0pl3ss r1mm1ng p3nd3j0 bl0w-j0b 0pr0tt3n b0ll0cks g00_g1rl sch13ss3r m1nch10n3 gr3pp3ld3l h0w-t0-k1ll l13fd3sgr0t_
+When removing &, replacing space by either "-" or "\_" and doing common substibutions i->1 e->3 o->0, we finally managed to generate 24: _sm l0rt d1ck s3x0 p0p3l k1nky b1tch 1ng010 3r0t1c p0kk3r f1g0n3 schl0ng t0pl3ss r1mm1ng p3nd3j0 bl0w-j0b 0pr0tt3n kyrv1tys b0ll0cks sch13ss3r m1nch10n3 gr3pp3ld3l h0w-t0-k1ll l13fd3sgr0_
 
-I'd say that finding [b1tch](https://www.merriam-webster.com/dictionary/bitch) offensive is [b0ll0cks](https://www.merriam-webster.com/dictionary/bollocks), but you can always write 769061 as b1t.ch and 23899866350 as b0ll.0cks if you prefer.
+I'd say that finding [k1nky](https://www.merriam-webster.com/dictionary/k1nky) offensive is [b0ll0cks](https://www.merriam-webster.com/dictionary/bollocks), but you can always write 769061 as b1t.ch and 23899866350 as b0ll.0cks if you prefer.
 
 ## Contributing
 
@@ -106,6 +121,7 @@ If you have a suggestion that would make this better, please fork the repo and c
 1. Fork the Project
 1. Create your Feature Branch (git checkout -b feature/AmazingFeature)
 1. Commit your Changes (git commit -m 'Add some AmazingFeature')
+1. Test -and write new if needed-  (npm test)
 1. Push to the Branch (git push origin feature/AmazingFeature)
 1. Open a Pull Request
 

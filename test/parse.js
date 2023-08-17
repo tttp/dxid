@@ -4,6 +4,7 @@ import { parse } from '../src/dxid.js';
 test('parse properly some dxid', (t) => {
   t.is(parse('8c'), 1);
   t.is(parse('pcn'), 42);
+  t.is(parse('321'),791);
   t.is(parse('bc8b'), 1984);
   t.is(parse('6k9999999999'), Number.MAX_SAFE_INTEGER);
 });
@@ -27,6 +28,7 @@ test('parse invalid dxid(s) throw errors', (t) => {
   t.throws(() => parse('ac', true), { instanceOf: RangeError });
   t.throws(() => parse('ac', 'whatever'), { instanceOf: RangeError });
   t.throws(() => parse('invalid'), { instanceOf: RangeError });
+  t.throws(() => parse(321), { instanceOf: Error });
 });
 
 test('parse invalid dxid(s) with throwError===false returns false', (t) => {

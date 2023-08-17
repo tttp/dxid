@@ -16,9 +16,7 @@
 // convert to and from base32 inspired by number-to-base32 (MIT)
 //const base32Chars = '0123456789abcdefghjkmnpqrstvwxyz'; // croford
 //const base32Chars   = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567'; // rfc 4648
-//const base32Chars   = 'BCDFGHJKLMNPQRSTVWXZ_-0123456789'; //without voyels
-const base32Chars = "bcdfghjklmnpqrstvwxz_-0123456789"; //lowercase withyou voyel
-//const alias = { O:0, I:1, E:3 }
+const base32Chars = "bcdfghjklmnpqrstvwxyz-0123456789"; //lowercase without the most common voyels
 
 // binary to string lookup table
 const b2s = base32Chars.split('');
@@ -30,13 +28,9 @@ for (let i = 0; i < base32Chars.length; i++) {
   s2b[base32Chars.charCodeAt(i)] = i;
 }
 
-export const normalize = (str) => {
-  // remove AU or AEIOU (and no alias?
-  str = str.replaceAll('.', '').toLowerCase();
-//  for (const x in alias) {
-//    str = str.replace(new RegExp(x, 'g'), alias[x]);
-//  }
-  return str;
+export const normalize = (string_dxid) => {
+  // remove aeiou ?
+  return string_dxid.replaceAll('.', '').toLowerCase();
 }
 
 export const luhn32 = (base32url) => {
@@ -98,6 +92,9 @@ export const decode32 = (base32) => {
 
 export const stringify = (number) => {
   if (!Number.isSafeInteger(number)) {
+    if (typeof number !== 'number') 
+      throw new Error(`The id must be an integer, not a ${typeof number}`);
+
     throw new RangeError(`The id must be smaller than safe integer <${Number.MAX_SAFE_INTEGER}`);
   }
   if (number < 0) {
