@@ -1,8 +1,9 @@
 import test from 'ava';
-import { stringify, luhn64 } from '../src/dxid.js';
+import { stringify, luhn32 as luhn } from '../src/dxid.js';
 // from https://en.wikipedia.org/wiki/Luhn_mod_N_algorithm
 
-const codePoints = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
+//const codePoints = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
+const codePoints = '0123456789abcdefghjkmnpqrtuvwxyz'
 // This can be any string of permitted characters
 
 function numberOfValidInputCharacters() {
@@ -69,19 +70,14 @@ function validateCheckCharacter(input) {
 }
 
 test('compare with the naive wikipedia version', (t) => {
-  t.is(luhn64('A'), generateCheckCharacter('A'));
-  t.true(validateCheckCharacter('A', 'A'));
-  t.is(luhn64('e_'), generateCheckCharacter('e_'));
-  t.is(luhn64('B'), generateCheckCharacter('B'));
-  t.is(luhn64('Z'), generateCheckCharacter('Z'));
-  t.is(luhn64('a'), generateCheckCharacter('a'));
-  t.is(luhn64('z'), generateCheckCharacter('z'));
-  t.is(luhn64('-'), generateCheckCharacter('-'));
-  t.is(luhn64('_'), generateCheckCharacter('_'));
-  t.is(luhn64('f_______-'), generateCheckCharacter('f_______-'));
-  t.is(luhn64('f________'), 'K');
+  t.true(validateCheckCharacter('1y'));
+  t.is(luhn('1'), generateCheckCharacter('1'));
+  t.is(luhn('0'), generateCheckCharacter('0'));
+  t.is(luhn('abcdef'), generateCheckCharacter('abcdef'));
+  t.is(luhn('a'), generateCheckCharacter('a'));
+  t.is(luhn('z'), generateCheckCharacter('z'));
   t.is(
-    generateCheckCharacter('f_______-'),
+    generateCheckCharacter('7zzzzzzzzzz'),
     stringify(Number.MAX_SAFE_INTEGER)[0],
   );
   // t.is(stringify(1984),'ke_');

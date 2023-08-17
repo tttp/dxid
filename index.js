@@ -7,7 +7,7 @@ if (argv.length !== 1) {
   process.exit(1);
 }
 try {
-  if (Number.isNaN(argv[0])) {
+  if (isNaN(argv[0])) {
     const id = parse(argv[0]);
     console.log(id);
   } else {

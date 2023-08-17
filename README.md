@@ -37,7 +37,7 @@ as the code base is tiny, you can also import everything
 
 We have used two safe and common algorithms:
 
-- the number is first encoded using [base64url](https://datatracker.ietf.org/doc/html/rfc4648#section-5)
+- the number is first encoded using [base32](https://www.crockford.com/base32.html) with symbols that are url safe and prevents confusion (ilo are removed as visually close to 110)
 - it's prefixed with a checksum, the [luhn mode 64](https://en.wikipedia.org/wiki/Luhn_mod_N_algorithm) of the encoded id
 To keep the dxid short, we only base64 encode the significant bits, it's similar than writing 42 instead of 00000042.
 
@@ -76,39 +76,14 @@ As soon as you help me with writing a postgresl or mysql function, you'll be abl
 
 Putting together a bunch of letters is likely to end up with existing words in english or another language, and so...
 
-    $npx dxid 82117 -> NUDE
-    $npx dxid 191342 -> butt
+    $npx dxid 10901 -> damn
+    $npx dxid 11021 -> tard
 
 We can't deal with that in the same way car plate numbers do (we can't ban numbers), but [RFC 3986](http://www.ietf.org/rfc/rfc3986.txt) defines : ALPHA  DIGIT  "-" / "." / "\_" / "~" as safe characters, so in theory, we could ignore . and ~ in the dxid and springle them in the dxid if needed.
 
-Testing a list of profane words (banned by google), we have 27 profane numbers that generate a name in lower, upper or with the first in upper and the rest in lower.
+Testing a list of profane words (banned by google), we have 2 profane numbers.
 
-- 78275 PT.HC
-- 81989 PU.BE
-- 82117 NU.DE
-- 124709 fe.ck
-- 154542 sl.ut
-- 165669 Ko.ck
-- 190893 ku.ms
-- 191342 bu.tt
-- 2142415 DI.LDO
-- 3727496 GO.OCH
-- 7980710 Fe.cal
-- 102269767 FGG.ING
-- 449427996 Gay.bob
-- 578946733 nig.gas
-- 679610536 dog.gin
-- 781338792 Fuk.kin
-- 7586448069 SHE.MALE
-- 8845570323 NIP.PLES
-- 28466064094 fag.tard
-- 2305021352494 shit-pot
-- 2366181661228 Vib.rator
-- 2367139776863 Dic.khole
-- 2779459544869 coc.ksuck
-- 2792207267489 doo.chbag
-- 221790693418789 Cyb.erfuck
-- 4003199668772947 BOO.OOOOOBS
+
 
 ## Contributing
 
