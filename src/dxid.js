@@ -30,7 +30,7 @@ for (let i = 0; i < base32Chars.length; i++) {
 
 export const normalize = (string_dxid) => {
   // remove aeiou ?
-  return string_dxid.replaceAll('.', '').toLowerCase();
+  return string_dxid.replaceAll('_', '').toLowerCase();
 }
 
 export const luhn32 = (base32url) => {
@@ -43,7 +43,7 @@ export const luhn32 = (base32url) => {
     const char = base32url.charAt(i);
     const charIndex = base32Chars.indexOf(char);
     if (charIndex === -1) {
-      throw new RangeError(`Invalid base32 character: ${char}`);
+      throw new RangeError(`Invalid character: ${char}`);
     }
 
     let digit = charIndex;
@@ -90,7 +90,7 @@ export const decode32 = (base32) => {
   return number;
 };
 
-export const stringify = (number) => {
+export const stringify = (number, addUnderscore) => {
   if (!Number.isSafeInteger(number)) {
     if (typeof number !== 'number') 
       throw new Error(`The id must be an integer, not a ${typeof number}`);
@@ -101,10 +101,16 @@ export const stringify = (number) => {
     throw new RangeError(`The id must be positive`);
   }
   const payload = encode32 (number);
-  return luhn32(payload).toLowerCase() + payload.toLowerCase();
+  const dxid = luhn32(payload) + payload;
+  if (addUnderscore !== false && /^\d+$/.test(dxid)) { // dxid looks like a number, let's add an undescore
+    const half = dxid.length /2;
+    return dxid.slice(0, half) + "_" + dxid.slice(half);
+  }
+  return dxid;
 };
 
 export const parse = (ubase32, throwError) => {
+  try {
   const base32=normalize(ubase32);
   const checksum = base32[0];
   const payload = base32.substring(1);
@@ -114,6 +120,9 @@ export const parse = (ubase32, throwError) => {
     throw new RangeError('invalid dxid');
   }
   return decode32(payload);
+  } catch (e) {
+    throw e;
+  }
 };
 
 export default { luhn32, stringify, parse, encode32, decode32 };

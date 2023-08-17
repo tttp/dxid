@@ -5,6 +5,7 @@ test('transform properly some ids', (t) => {
   t.is(stringify(1), '8c');
   t.is(stringify(42), 'pcn');
   t.is(stringify(321), 'znc');
+  t.is(stringify(791), '3_21');
   t.is(stringify(1984), 'bc8b');
   t.is(stringify(Number.MAX_SAFE_INTEGER), '6k9999999999');
   // t.is(stringify(Number.MAX_SAFE_INTEGER + 1),'tf________');
@@ -33,5 +34,5 @@ test('max length of dxid is 12', (t) => {
     }
     t.is(id, parse(dxid));
   }
-  t.is(longer, 77);
+  t.is(longer, 97);
 });

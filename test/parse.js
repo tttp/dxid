@@ -15,11 +15,12 @@ test('parse properly some dxid in uppercase', (t) => {
   t.is(parse('bC8B'), 1984);
 });
 
-test('parse properly some dxid with .', (t) => {
-  t.is(parse('8.c'), 1);
-  t.is(parse('.pcn'), 42);
-  t.is(parse('bc8b.'), 1984);
-  t.is(parse('6k99.9999.9999'), Number.MAX_SAFE_INTEGER);
+test('parse properly some dxid with _', (t) => {
+  t.is(parse('3_21'),791);
+  t.is(parse('8_c'), 1);
+  t.is(parse('_pcn'), 42);
+  t.is(parse('bc8b_'), 1984);
+  t.is(parse('6k99_9999_9999'), Number.MAX_SAFE_INTEGER);
 });
 
 test('parse invalid dxid(s) throw errors', (t) => {

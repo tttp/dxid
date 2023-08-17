@@ -24,7 +24,7 @@ try {
   }
 
   const d = argv[0];
-  if (isNaN(d) || d[0] ==='-' ||  d[0] ==='0') {
+  if (!/^\d+$/.test(d)) {
     const id = parse(d);
     console.log(id);
   } else {
