@@ -28,6 +28,7 @@
   "keywords": [
     "id",
     "luhn",
+    "base32",
     "base64",
     "uuid"
   ],

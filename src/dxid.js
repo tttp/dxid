@@ -16,10 +16,9 @@
 // convert to and from base32 inspired by number-to-base32 (MIT)
 //const base32Chars = '0123456789abcdefghjkmnpqrstvwxyz'; // croford
 //const base32Chars   = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567'; // rfc 4648
-const base32Chars   = 'BCDFGHJKLMNPQRSTVWXZ_-0123456789'; //without voyels
-
-const alias = { O:0, I:1, E:3 }
-//const profane = [10634,10901,11021,344746,367080936657550];
+//const base32Chars   = 'BCDFGHJKLMNPQRSTVWXZ_-0123456789'; //without voyels
+const base32Chars = "bcdfghjklmnpqrstvwxz_-0123456789"; //lowercase withyou voyel
+//const alias = { O:0, I:1, E:3 }
 
 // binary to string lookup table
 const b2s = base32Chars.split('');
@@ -33,10 +32,10 @@ for (let i = 0; i < base32Chars.length; i++) {
 
 export const normalize = (str) => {
   // remove AU or AEIOU (and no alias?
-  str = str.replaceAll('.', '').toUpperCase();
-  for (const x in alias) {
-    str = str.replace(new RegExp(x, 'g'), alias[x]);
-  }
+  str = str.replaceAll('.', '').toLowerCase();
+//  for (const x in alias) {
+//    str = str.replace(new RegExp(x, 'g'), alias[x]);
+//  }
   return str;
 }
 
@@ -102,7 +101,7 @@ export const stringify = (number) => {
     throw new RangeError(`The id must be smaller than safe integer <${Number.MAX_SAFE_INTEGER}`);
   }
   const payload = encode32 (number);
-  return luhn32(payload) + payload;
+  return luhn32(payload).toLowerCase() + payload.toLowerCase();
 };
 
 export const parse = (ubase32, throwError) => {

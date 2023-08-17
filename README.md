@@ -9,10 +9,9 @@ To prevent errors, long numbers like credit cards, social insurance numbers, IBA
 **dxid** is a _display_ format that is more compact than displaying your id as number while containing a checksum to prevent any errors when as developers we type this id.
 
 for instance (using the cli):
-
-    $npx dxid 1984 -> 01y0
-    $npx dxid 42 -> b1a
-    $npx dxid 1234567898765432 -> r132tmygx63r
+    $npx dxid 1984 -> bc8b
+    $npx dxid 42 -> pcn
+    $npx dxid 1234567898765432 -> 2cfd4_8v7jf2
 
 It can be displayed where you would display the number, can be used in a url (without needing url encoding) or as as filename (eg. for a cache).
 
@@ -21,25 +20,28 @@ This repository contains an implementation in javascript with no dependency that
 ## usage
 
     import { stringify, parse } from "dxid";
-    console.log(stringify(1984)); // 01y0
-    console.log(parse("01y0")); // 1984
-    console.log(parse("10y0")); // throw RangeError
-    console.log(parse("10y0", false)); // return false (or the id if valid)
+    console.log(stringify(1984)); // bc8b
+    console.log(parse("bc8b")); // 1984
+    console.log(parse("cb8b")); // throw RangeError
+    console.log(parse("cb8b", false)); // return false (or the id if valid)
 
 as the code base is tiny, you can also import everything
 
     import dxid from "dxid";
-    console.log(stringify(1984)); // 01y0
-    console.log(parse("01y0")); // 1984
+    console.log(stringify(1984)); // bc8b
+    console.log(parse("bc8b")); // 1984
 
 
 ## implementation
 
 We have used two safe and common algorithms:
 
-- the number is first encoded using [base32](https://www.crockford.com/base32.html) with symbols that are url safe and prevents confusion (IlO are removed as visually close to 110)
+- the number is first encoded using base32 with 32 symbols that are url safe (no need to encode)
 - it's prefixed with a checksum, the [luhn mode 32](https://en.wikipedia.org/wiki/Luhn_mod_N_algorithm) of the encoded id
-To keep the dxid short, we only base32 encode the significant bits, it's similar than writing 42 instead of 00000042.
+- to remove risks of generating a dxid that looks like a word, we removed all voyels. the 32 chars are *bcdfghjklmnpqrstvwxz_-0123456789*
+- To keep the dxid short, we only base32 encode the significant bits, it's similar than writing 42 instead of 00000042.
+- to make it easier to write long names, you can put "." as a separator anywhere and it will be ignored
+- to make it easier to type, dxid is case insensitive, but always generated as lowercase
 
 luhn code is what is used on your credit card checksum for instance. It detect all single-digit errors, as well as almost all transpositions of adjacent digits.
 
@@ -70,23 +72,20 @@ As frontend dev, you probably displayed a screen that worked great with a tiny i
 
 As backend dev, you might have had to query directly the database with a "select ... where id = 3245082357", or update or delete and hoping you copy pasted the right id. 
 
-As soon as you help me with writing a postgresl or mysql function, you'll be able to where id = dxid_parse ("cDBbAb0") and prevent the stupid mistake that I did 2 days ago and that sent me into the quest that led to dxid.
-
 ## word have meaning too, more rambling
 
 Putting together a bunch of letters is likely to end up with existing words. To prevent that, we removed all voyels from our base of used chars.
 
 
-We can't deal with that in the same way car plate numbers do (we can't ban numbers), but [RFC 3986](http://www.ietf.org/rfc/rfc3986.txt) defines : ALPHA  DIGIT  "-" / "." / "\_" / "~" as safe characters, so in theory, we could ignore . and ~ in the dxid and springle them in the dxid if needed.
+We can't deal with that in the same way car plate numbers do (we can't ban numbers), but [RFC 3986](http://www.ietf.org/rfc/rfc3986.txt) defines : ALPHA  DIGIT  "-" / "." / "\_" / "~" as safe characters, so in theory, we could ignore . and ~ in the dxid and springle them in the dxid if needed. We only kept "." as accepted separator
 
-Testing a list of profane words (banned by google), we have 7 profane numbers, that we harcoded to include a "-"
+Testing a list of profane words (banned by google), we have 0 profane numbers.
 
-    $npx dxid 10901 -> da-mn
-    $npx dxid 11021 -> ta-rd
+using a [list with 28 languages](https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words), we still have 0.
 
-using a [list with more language](https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words), we have 3 extra:
+When removing &, replacing space by either "-" or "\_" and doing common substibutions i->1 e->3 o->0, we finally managed to generate 24: _sm l0rt d1ck s3x0 p0p3l b1tch 1ng010 3r0t1c p0kk3r f1g0n3 schl0ng t0pl3ss r1mm1ng p3nd3j0 bl0w-j0b 0pr0tt3n b0ll0cks g00_g1rl sch13ss3r m1nch10n3 gr3pp3ld3l h0w-t0-k1ll l13fd3sgr0t_
 
-
+I'd say that finding [b1tch](https://www.merriam-webster.com/dictionary/bitch) offensive is [b0ll0cks](https://www.merriam-webster.com/dictionary/bollocks), but you can always write 769061 as b1t.ch and 23899866350 as b0l.l0.cks
 
 ## Contributing
 
@@ -104,7 +103,7 @@ If you have a suggestion that would make this better, please fork the repo and c
 
 ## License and credit
 
-We started with base64url, that made the ids a bit smaller but created a lot of swearwords, so we switched to base32 but instead of using [RFC 4648](https://datatracker.ietf.org/doc/html/rfc4648) using the Croford alphabet, that generates less swear words. Croford suggests to use a simplier mod 37 digits, but:
+We started with base64url, that made the ids a bit smaller but created a lot of swearwords, so we switched to base32 but instead of using [RFC 4648](https://datatracker.ietf.org/doc/html/rfc4648) we used an alphabet without any voyel to avoid generating swear words. Croford suggests to use a mod 37 for checksum, but:
 - luhn is better at catching permutations
 - it makes sense to use a prime number if the keys are not uniformly distributed, but it isn't our case, and it isn't a useful propery in the first place 
 

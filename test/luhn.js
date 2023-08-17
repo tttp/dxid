@@ -3,7 +3,8 @@ import { stringify, luhn32 as luhn } from '../src/dxid.js';
 // from https://en.wikipedia.org/wiki/Luhn_mod_N_algorithm
 
 //const codePoints = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
-const codePoints   = 'BCDFGHJKLMNPQRSTVWXZ_-0123456789'; //without voyels
+//const codePoints   = 'BCDFGHJKLMNPQRSTVWXZ_-0123456789'; //without voyels
+const codePoints = "bcdfghjklmnpqrstvwxz_-0123456789"; //lowercase withyou voyel
 // This can be any string of permitted characters
 
 function numberOfValidInputCharacters() {
@@ -74,10 +75,10 @@ test('compare with the naive wikipedia version', (t) => {
   t.is(luhn('1'), generateCheckCharacter('1'));
   t.is(luhn('0'), generateCheckCharacter('0'));
   t.is(luhn('0123456789'), generateCheckCharacter('0123456789'));
-  t.is(luhn('BCD'), generateCheckCharacter('BCD'));
-  t.is(luhn('X_Z'), generateCheckCharacter('X_Z'));
+  t.is(luhn('bcd'), generateCheckCharacter('bcd'));
+  t.is(luhn('x_z'), generateCheckCharacter('x_z'));
   t.is(
-    generateCheckCharacter('K9999999999'),
+    generateCheckCharacter('k9999999999'),
     stringify(Number.MAX_SAFE_INTEGER)[0],
   );
   // t.is(stringify(1984),'ke_');

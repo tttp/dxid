@@ -2,10 +2,10 @@ import test from 'ava';
 import { stringify, parse } from '../src/dxid.js';
 
 test('transform properly some ids', (t) => {
-  t.is(stringify(1), '8C');
-  t.is(stringify(42), 'PCN');
-  t.is(stringify(1984), 'BC8B');
-  t.is(stringify(Number.MAX_SAFE_INTEGER), '6K9999999999');
+  t.is(stringify(1), '8c');
+  t.is(stringify(42), 'pcn');
+  t.is(stringify(1984), 'bc8b');
+  t.is(stringify(Number.MAX_SAFE_INTEGER), '6k9999999999');
   // t.is(stringify(Number.MAX_SAFE_INTEGER + 1),'tf________');
 });
 
