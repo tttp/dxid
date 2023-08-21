@@ -31,9 +31,10 @@ try {
     const dxid = stringify(+d);
     try { // some dxid looks like number, 700,501,302,103...
       const id = parse(d);
-      console.warn (d, "can be either an id or a dxid");
+      console.error ("🤔",d, "can be either an id or a dxid");
       console.log(d,"->id",parse(d));
       console.log(+d,"->dxid",dxid);
+      console.warn("💡 use $npx dxid stringify "+d +" for ids");
       process.exit(1);
     } catch (e) {
       console.log(dxid);
@@ -41,6 +42,7 @@ try {
   }
 
 } catch (error) {
-  console.error(error.toString());
+//console.error(error);
+  console.error("🛑", error.toString() , "💣");
   process.exit(5);
 }

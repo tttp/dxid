@@ -8,6 +8,9 @@ test(`how long to generate ${max.toLocaleString()} dxid`, (t) => {
 
   for (let id = 1; id < max; id++) {
     const dxid = stringify(id);
+    if (dxid[1] === 'b') 
+      t.false(dxid[1],'b','a dxid payload should not start with b');
+     
       if (!isNaN(dxid) && dxid[0]!=='-' &&  dxid[1]!=='x' ) {
         base10dxid.add(dxid);
       }

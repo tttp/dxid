@@ -2,24 +2,19 @@
 // current implementation luhn base37
 
 /*
- When decoding, upper and lower case letters are accepted, and i will
- be treated as 1 and o will be treated as 0. 
- When encoding, only upper case letters are used.
+ When decoding, upper and lower case letters are accepted.
+ When encoding, only lower case letters are used.
 
-
- underscores (_) can be inserted into symbol strings. This can partition a
+ Hyphens (-) can be inserted into symbol strings. This can partition a
  string into manageable pieces, improving readability by helping to prevent
- confusion. Hyphens are ignored during decoding. An application may look for
- hyphens to assure symbol string correctness.
+ confusion. Hyphens are ignored during decoding.
 */
 
 // convert to and from base32 inspired by number-to-base32 (MIT)
-//const base32Chars = '0123456789abcdefghjkmnpqrstvwxyz'; // croford
-//const base32Chars   = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567'; // rfc 4648
-const base32Chars = "bcdfghjklmnpqrstvwxyz-0123456789"; //lowercase without the most common voyels
-
-// binary to string lookup table
-const b2s = base32Chars.split('');
+// const base32Chars = '0123456789abcdefghjkmnpqrstvwxyz'; // croford
+// const base32Chars   = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567'; // rfc 4648
+const base32Chars = 'bcdfghjklmnpqrstvwxyz_0123456789'; // lowercase without the most common voyels
+const separator = '-'; // can be inserted into dxid, to partition into manageable pieces and improve readability. ignored during decoding
 
 // string to binary lookup table
 // 123 == 'z'.charCodeAt(0) + 1
@@ -28,14 +23,11 @@ for (let i = 0; i < base32Chars.length; i++) {
   s2b[base32Chars.charCodeAt(i)] = i;
 }
 
-export const normalize = (string_dxid) => {
-  // remove aeiou ?
-  return string_dxid.replaceAll('_', '').toLowerCase();
-}
+export const normalize = (dxid) =>
+  // remove aeiou ? should we ignore instead of crashing if voyel?
+  dxid.replaceAll(separator, '').toLowerCase();
 
 export const luhn32 = (base32url) => {
-// ALPHA  DIGIT  "-" / "." / "_" / "~"
-// 32=i 33=l 34=o 35=u 36=- 37=_
   let sum = 0;
   let isDouble = true; // Start with the rightmost digit being doubled
 
@@ -65,15 +57,17 @@ export const luhn32 = (base32url) => {
 };
 
 // number to base32
-export const encode32 = (number) => {
-  if (number === 0) {
-    return '0';
+export const encode32 = (id) => {
+  if (id === 0) {
+    return base32Chars[id];
   }
 
   let base32String = '';
+  let number = id;
   while (number > 0) {
     const digit = number % 32;
     base32String = base32Chars[digit] + base32String;
+    //number = number >>> 5; // don't do that, breaks with MAX_SAFE_INTEGER
     number = Math.floor(number / 32);
   }
 
@@ -92,37 +86,45 @@ export const decode32 = (base32) => {
 
 export const stringify = (number, addUnderscore) => {
   if (!Number.isSafeInteger(number)) {
-    if (typeof number !== 'number') 
-      throw new Error(`The id must be an integer, not a ${typeof number}`);
+    if (typeof number !== 'number') throw new Error(`The id must be an integer, not a ${typeof number}`);
 
-    throw new RangeError(`The id must be smaller than safe integer <${Number.MAX_SAFE_INTEGER}`);
+    throw new RangeError(
+      `The id must be smaller than safe integer <${Number.MAX_SAFE_INTEGER}`,
+    );
   }
   if (number < 0) {
-    throw new RangeError(`The id must be positive`);
+    throw new RangeError('The id must be positive');
   }
-  const payload = encode32 (number);
+  const payload = encode32(number);
   const dxid = luhn32(payload) + payload;
-  if (addUnderscore !== false && /^\d+$/.test(dxid)) { // dxid looks like a number, let's add an undescore
-    const half = dxid.length /2;
-    return dxid.slice(0, half) + "_" + dxid.slice(half);
+  if (addUnderscore !== false && /^\d+$/.test(dxid)) {
+    // dxid looks like a number, let's add an undescore
+    const half = dxid.length / 2;
+    return dxid.slice(0, half) + separator + dxid.slice(half);
   }
   return dxid;
 };
 
 export const parse = (ubase32, throwError) => {
-  try {
-  const base32=normalize(ubase32);
+  const base32 = normalize(ubase32);
   const checksum = base32[0];
   const payload = base32.substring(1);
 
   if (luhn32(payload) !== checksum || base32.length < 2) {
-    if (throwError === false) { return false; }
+    if (throwError === false) {
+      return false;
+    }
     throw new RangeError('invalid dxid');
   }
-  return decode32(payload);
-  } catch (e) {
-    throw e;
+  const id = decode32(payload);
+  if (!Number.isSafeInteger(id)) {
+    throw new RangeError(
+      'dxid too long, the id would be greater than safe integer > ' + Number.MAX_SAFE_INTEGER
+    );
   }
+  return decode32(payload);
 };
 
-export default { luhn32, stringify, parse, encode32, decode32 };
+export default {
+  luhn32, stringify, parse, encode32, decode32,
+};

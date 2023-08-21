@@ -3,10 +3,19 @@ import { parse } from '../src/dxid.js';
 
 test('parse properly some dxid', (t) => {
   t.is(parse('8c'), 1);
+  t.is(parse('__'), 21);
   t.is(parse('pcn'), 42);
-  t.is(parse('321'),791);
+  t.is(parse('3-21'),791);
   t.is(parse('bc8b'), 1984);
   t.is(parse('6k9999999999'), Number.MAX_SAFE_INTEGER);
+});
+
+test ('parse all the symbols', (t) => {
+  t.is(parse('p0123456789'), 800197332334559 );
+  t.is(parse('fqrstvwxyz_'), 437003813998229);
+  t.is(parse('sqrstvwxyzb'), 437003813998208);
+  t.is(parse('4cdfghjklmnp'), 1199710202504523);
+  
 });
 
 test('parse properly some dxid in uppercase', (t) => {
@@ -15,12 +24,12 @@ test('parse properly some dxid in uppercase', (t) => {
   t.is(parse('bC8B'), 1984);
 });
 
-test('parse properly some dxid with _', (t) => {
-  t.is(parse('3_21'),791);
-  t.is(parse('8_c'), 1);
-  t.is(parse('_pcn'), 42);
-  t.is(parse('bc8b_'), 1984);
-  t.is(parse('6k99_9999_9999'), Number.MAX_SAFE_INTEGER);
+test('parse properly some dxid with - separator', (t) => {
+  t.is(parse('3-21'),791);
+  t.is(parse('8-c'), 1);
+  t.is(parse('-pcn'), 42);
+  t.is(parse('bc8b-'), 1984);
+  t.is(parse('6k99-9999-9999'), Number.MAX_SAFE_INTEGER);
 });
 
 test('parse invalid dxid(s) throw errors', (t) => {

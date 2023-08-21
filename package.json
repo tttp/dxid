@@ -13,14 +13,22 @@
       "types": "./dist/index.d.ts"
     }
   },
+  "run" : {
+    "dxid": "./index.js"
+   },
   "scripts": {
     "build": "node src/esbuild.js",
     "prepublishOnly": "npm run build",
     "id": "./index.js",
     "dxid": "./index.js",
     "test": "ava",
-    "eslint": "npx eslint"
+    "eslint": "npx eslint src --fix"
   },
+	"files": [
+		"src",
+		"dist",
+		"*.d.ts"
+	],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tttp/dxid.git"
