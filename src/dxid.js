@@ -23,9 +23,10 @@ for (let i = 0; i < base32Chars.length; i++) {
   s2b[base32Chars.charCodeAt(i)] = i;
 }
 
-export const normalize = (dxid) =>
+export const normalize = (dxid) => (
   // remove aeiou ? should we ignore instead of crashing if voyel?
-  dxid.replaceAll(separator, '').toLowerCase();
+  dxid.replaceAll(separator, '').toLowerCase()
+);
 
 export const luhn32 = (base32url) => {
   let sum = 0;
@@ -67,7 +68,7 @@ export const encode32 = (id) => {
   while (number > 0) {
     const digit = number % 32;
     base32String = base32Chars[digit] + base32String;
-    //number = number >>> 5; // don't do that, breaks with MAX_SAFE_INTEGER
+    // number = number >>> 5; // don't do that, breaks with MAX_SAFE_INTEGER
     number = Math.floor(number / 32);
   }
 
@@ -119,12 +120,25 @@ export const parse = (ubase32, throwError) => {
   const id = decode32(payload);
   if (!Number.isSafeInteger(id)) {
     throw new RangeError(
-      'dxid too long, the id would be greater than safe integer > ' + Number.MAX_SAFE_INTEGER
+      `dxid too long, the id would be greater than safe integer > ${
+        Number.MAX_SAFE_INTEGER}`,
     );
   }
   return decode32(payload);
 };
 
+export const id = (dxidorid) => {
+  if (/^\d+$/.test(dxidorid)) {
+    return stringify(+dxidorid);
+  }
+  return parse(dxidorid);
+};
+
 export default {
-  luhn32, stringify, parse, encode32, decode32,
+  id,
+  luhn32,
+  stringify,
+  parse,
+  encode32,
+  decode32,
 };

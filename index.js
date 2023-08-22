@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { stringify, parse } from './src/dxid.js';
+import { id, stringify, parse } from './src/dxid.js';
 
 const argv = process.argv.slice(2);
 if (argv.length === 0 || argv.length > 2) {
@@ -23,13 +23,10 @@ try {
     process.exit(0);
   }
 
+  if (argv.length === 1) {
   const d = argv[0];
-  if (!/^\d+$/.test(d)) {
-    const id = parse(d);
-    console.log(id);
-  } else {
-    const dxid = stringify(+d);
-    try { // some dxid looks like number, 700,501,302,103...
+  console.log(id (d));
+/*    try { // some dxid looks like number, 700,501,302,103...
       const id = parse(d);
       console.error ("🤔",d, "can be either an id or a dxid");
       console.log(d,"->id",parse(d));
@@ -39,8 +36,8 @@ try {
     } catch (e) {
       console.log(dxid);
     }
+*/
   }
-
 } catch (error) {
 //console.error(error);
   console.error("🛑", error.toString() , "💣");
