@@ -147,11 +147,13 @@ If you have a suggestion that would make this better, please fork the repo and c
 
 The first (unreleased) version of dxid used base64url, that made the ids a bit smaller (10 instead of 12 digits) but created a lot of words in the banned list, so we switched to base32, but instead of using [RFC 4648](https://datatracker.ietf.org/doc/html/rfc4648) we used an alphabet without any voyel.
 
-[Douglas Crockford used base 32 in a 2019 proposal](https://www.crockford.com/base32.html), we made 4 changes that we think improved his work:it's almost impossible a dxid is a english (or any language) word, less chars/symbols (they use 37 we use 32), a checksum that catches more permutations (luhn instead of modulo) and a less linear sequence of dxids.
+[Douglas Crockford used base 32 in a 2019 proposal](https://www.crockford.com/base32.html), we made 4 changes that we think improved his work:it's almost impossible a dxid is a english (or any language) word, less chars/symbols (they use 37on the checksum, we keep 32), a checksum that catches more transpositions (luhn instead of mod 37) and a less linear sequence of dxids.
 
 [Bech32](https://en.bitcoin.it/wiki/Bech32) has an alphabet that is scrambling the symbols _qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4_, for simplicity sake, we didn't go that path.
 
 [ulid](https://github.com/ulid/spec), if you need a better UUID.
+
+There are slightly better checksum than luhn, for instance [Gumm]https://www.mathematik.uni-marburg.de/~gumm/Papers/ANewClassOfCheckDigitMethods.pdf) that catch all transpositions, but less common/more complex.
 
 Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
 
