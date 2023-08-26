@@ -74,7 +74,7 @@ dxid length:
 
 Using dxid instead of a number as the representation of the ID is **not increasing security**. knowing one dxid, it's trivial to find the ids below or above; do not use it thinking it will prevent users to access other records, you should enforce it otherwise (either authentication and ACL or with a cryptographic secure hash).
 
-it might be unexpected that some dxid do look like a number, either positive: _700,501,302,103_ or hex: _0xcd,0xfc,0x01_.
+it might be unexpected that some dxid do look like a number, either positive: _700,501,302,321, 103_ 
 
 To prevent that, we add an undescore to any dxid that could be ambigous.
     $npx dxid parse 791 -> 3-21
@@ -119,11 +119,11 @@ so base 10 is well known, but it produces strings that are very long and might b
 
 Putting together a bunch of letters is likely to end up with existing words. To prevent that, we removed most voyels from our base of acceptable digits.
 
-We kept "\_" as a char you can put anywhere in the dxid to make it easier to read/type: they are ignored while converting dxid to a number and you can springle them in the dxid if you want to. 
+We kept "-" as a char you can put anywhere in the dxid to make it easier to read/type: they are ignored while converting dxid to a number and you can springle them in the dxid if you want to. 
 
 using a [list with 28 languages](https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words), we have 448 words that contains only letters and numbers from our base32 (replacing space by \_). None of these are a dxid.
 
-If we try all the common substitutions (eg i replaced by 1, e->3 o->=), there are 24 words that are dxid  _l0rt d1ck s3x0 p0p3l k1nky b1tch 1ng010 3r0t1c p0kk3r f1g0n3 schl0ng t0pl3ss r1mm1ng p3nd3j0 bl0w\_j0b 0pr0tt3n kyrv1tys d0gstyl3 b0ll0cks sch13ss3r m1nch10n3 gr3pp3ld3l h0w\_t0\_k1ll l13fd3sgr0t_
+If we try all the common substitutions (eg i replaced by 1, e->3 o->0), there are 24 "words" that are dxid:  _l0rt d1ck s3x0 p0p3l k1nky b1tch 1ng010 3r0t1c p0kk3r f1g0n3 schl0ng t0pl3ss r1mm1ng p3nd3j0 bl0w\_j0b 0pr0tt3n kyrv1tys d0gstyl3 b0ll0cks sch13ss3r m1nch10n3 gr3pp3ld3l h0w\_t0\_k1ll l13fd3sgr0t_
 
 I'd say that finding [k1nky](https://www.merriam-webster.com/dictionary/kinky) offensive is [b0ll0cks](https://www.merriam-webster.com/dictionary/bollocks), but you can always write 769061 as b1t-ch and 23899866350 as b0ll-0cks if you prefer.
 
@@ -143,17 +143,17 @@ If you have a suggestion that would make this better, please fork the repo and c
 1. Push to the Branch (git push origin feature/AmazingFeature)
 1. Open a Pull Request
 
-## Prior art, inspiration and license
+## Prior art, inspirations and license
 
 The first (unreleased) version of dxid used base64url, that made the ids a bit smaller (10 instead of 12 digits) but created a lot of words in the banned list, so we switched to base32, but instead of using [RFC 4648](https://datatracker.ietf.org/doc/html/rfc4648) we used an alphabet without any voyel.
 
-[Douglas Crockford used base 32 in a 2019 proposal](https://www.crockford.com/base32.html), we made 4 changes that we think improved his work:it's almost impossible a dxid is a english (or any language) word, less chars/symbols (they use 37on the checksum, we keep 32), a checksum that catches more transpositions (luhn instead of mod 37) and a less linear sequence of dxids.
+[Douglas Crockford used base 32 in a 2019 proposal](https://www.crockford.com/base32.html), we made 4 changes: it's almost impossible a dxid is a english (or any language) word, less chars/symbols (he uses 37 on the checksum, we keep 32), a checksum that catches more transpositions (luhn instead of mod 37) and a less linear sequence of dxids.
 
 [Bech32](https://en.bitcoin.it/wiki/Bech32) has an alphabet that is scrambling the symbols _qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4_, for simplicity sake, we didn't go that path.
 
-[ulid](https://github.com/ulid/spec), if you need a better UUID.
+[ulid](https://github.com/ulid/spec), if want a better UUID.
 
-There are slightly better checksum than luhn, for instance [Gumm]https://www.mathematik.uni-marburg.de/~gumm/Papers/ANewClassOfCheckDigitMethods.pdf) that catch all transpositions, but less common/more complex.
+There are slightly better checksum than luhn, for instance [Gumm](https://www.mathematik.uni-marburg.de/~gumm/Papers/ANewClassOfCheckDigitMethods.pdf) that catch all transpositions, but less common/more complex.
 
 Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
 
