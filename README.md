@@ -151,6 +151,8 @@ The first (unreleased) version of dxid used base64url, that made the ids a bit s
 
 [Bech32](https://en.bitcoin.it/wiki/Bech32) has an alphabet that is scrambling the symbols _qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4_, for simplicity sake, we didn't go that path.
 
+[Geohash](https://en.wikipedia.org/wiki/Geohash) is using a base32 for geo coordinate (lat long).
+
 [ulid](https://github.com/ulid/spec), if want a better UUID.
 
 There are slightly better checksum than luhn, for instance [Gumm](https://www.mathematik.uni-marburg.de/~gumm/Papers/ANewClassOfCheckDigitMethods.pdf) that catch all transpositions, but less common/more complex.
