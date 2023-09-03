@@ -79,7 +79,6 @@ test(`testing naughty words dxid`, async (t) => {
     });
   }
 
-  t.is(profaneID.size,24,"profane words found "+ Array.from(profaneID).join(" "));
   const naughty = [];
   [...profaneID]
     .sort((a, b) => a - b)
@@ -90,6 +89,8 @@ test(`testing naughty words dxid`, async (t) => {
       } catch (e) {}
     });
 
+  //t.is(profaneID.size,24,"profane words found "+ Array.from(profaneID).join(" "));
+  t.is(profaneID.size,24,"profane words found "+ naughty.join(","));
   t.is(known,naughty.join(" "),"known naughty words only");
 //  console.log(naughty.join(" "));
   //console.log(bw);
