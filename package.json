@@ -13,9 +13,9 @@
       "types": "./dist/index.d.ts"
     }
   },
-  "run" : {
+  "run": {
     "dxid": "./index.js"
-   },
+  },
   "scripts": {
     "build": "node src/esbuild.js",
     "prepublishOnly": "npm run build",
@@ -24,11 +24,11 @@
     "test": "ava",
     "eslint": "npx eslint src --fix"
   },
-	"files": [
-		"src",
-		"dist",
-		"*.d.ts"
-	],
+  "files": [
+    "src",
+    "dist",
+    "*.d.ts"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tttp/dxid.git"
@@ -48,7 +48,6 @@
   },
   "homepage": "https://github.com/tttp/dxid#readme",
   "devDependencies": {
-    "@coffeeandfun/google-profanity-words": "^2.1.0",
     "ava": "^5.3.1",
     "esbuild": "^0.19.2",
     "eslint": "^8.47.0",
