@@ -127,6 +127,12 @@ If we try all the common substitutions (eg i replaced by 1, e->3 o->0), there ar
 
 I'd say that finding [k1nky](https://www.merriam-webster.com/dictionary/kinky) offensive is [b0ll0cks](https://www.merriam-webster.com/dictionary/bollocks), but you can always write 769061 as b1t-ch and 23899866350 as b0ll-0cks if you prefer.
 
+## html display tip
+
+to make it easier for users to copy the full id, you can add a user-select: all property to the dom element containing the id, eg:
+
+    .dxid { user-select: all }
+
 
 ## Contributing
 
@@ -151,7 +157,7 @@ The first (unreleased) version of dxid used base64url, that made the ids a bit s
 
 [Bech32](https://en.bitcoin.it/wiki/Bech32) has an alphabet that is scrambling the symbols _qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4_, for simplicity sake, we didn't go that path.
 
-[ulid](https://github.com/ulid/spec), if want a better UUID.
+[ulid](https://github.com/ulid/spec), if you want a better UUID.
 
 There are slightly better checksum than luhn, for instance [Gumm](https://www.mathematik.uni-marburg.de/~gumm/Papers/ANewClassOfCheckDigitMethods.pdf) that catch all transpositions, but less common/more complex.
 
