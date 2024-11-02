@@ -37,12 +37,14 @@ test('parse invalid dxid(s) throw errors', (t) => {
   t.throws(() => parse('ac'), { instanceOf: RangeError });
   t.throws(() => parse('ac', true), { instanceOf: RangeError });
   t.throws(() => parse('ac', 'whatever'), { instanceOf: RangeError });
+  t.throws(() => parse('inva/lid char'), { instanceOf: RangeError });
   t.throws(() => parse('invalid'), { instanceOf: RangeError });
   t.throws(() => parse(321), { instanceOf: Error });
 });
 
 test('parse invalid dxid(s) with throwError===false returns false', (t) => {
   t.false(parse('bcd', false));
+  t.false(parse('inva/lid char',false));
   t.truthy(parse('bc8b', false));
   t.is(parse('pcn', false), 42);
   t.is(parse('42', false), 42);

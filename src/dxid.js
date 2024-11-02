@@ -108,6 +108,7 @@ export const stringify = (number, addUnderscore) => {
 
 export const parse = (ubase32, throwError) => {
   let base32 = undefined;
+  let luhn = undefined;
   try {
     base32 = normalize(ubase32);
   } catch (e) {
@@ -118,8 +119,12 @@ export const parse = (ubase32, throwError) => {
   }
   const checksum = base32[0];
   const payload = base32.substring(1);
-
-  if (luhn32(payload) !== checksum || base32.length < 2) {
+  try {
+    luhn = luhn32(payload);
+  } catch (d) {
+    if (throwError) throw e;
+  }
+  if (luhn !== checksum || base32.length < 2) {
     if (throwError === false) {
       return Number (ubase32) || false;
     }
