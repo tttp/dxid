@@ -29,7 +29,7 @@ and use it to stringify or parse
     console.log(stringify(1984)); // bc8b
     console.log(parse("bc8b")); // 1984
     console.log(parse("cb8b")); // throw RangeError
-    console.log(parse("cb8b", false)); // return false (or the id if valid)
+    console.log(parse("cb8b", false)); // return false (or the id if valid or an id already)
 
 as the code base is tiny, you can also import everything
 
@@ -41,8 +41,9 @@ as the code base is tiny, you can also import everything
 If you want to maintain compatibility, you might need to handle ids that are either dxid (new) and parse or base10 ids (legacy) and simply do a string to number conversion, a convenience function "id" can be used
 
     import dxid from "dxid";
-    console.log(dxid.id("bc8b")); // 1984
-    console.log(dxid.id("1984")); // 1984
+    console.log(dxid.parse("bc8b", false)); // 1984
+    console.log(dxid.parse("1984"),false); // 1984
+    console.log(dxid.parse(1984),false); // 1984
 
 ## implementation
 

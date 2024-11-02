@@ -45,4 +45,6 @@ test('parse invalid dxid(s) with throwError===false returns false', (t) => {
   t.false(parse('bcd', false));
   t.truthy(parse('bc8b', false));
   t.is(parse('pcn', false), 42);
+  t.is(parse('42', false), 42);
+  t.is(parse(42, false), 42);
 });
