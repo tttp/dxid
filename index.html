@@ -88,7 +88,7 @@
             <ul>
               <li>Easier to read, write, and remember</li>
               <li>Less prone to copy/paste errors</li>
-              <li>Built-in error detection to catch typos</li>
+              <li>Built-in <em data-tooltip="the first digit is a checksum, like for credit cards or IBANs">error detection</em> to catch typos</li>
             </ul>
           </li>
           <li>
@@ -102,6 +102,9 @@
                 You&#39;ll say: &quot;There&#39;s a problem with Widget
                 <a href="#lkhhc">lkhhc</a>&quot; (shorter and catches typos)
               </li>
+              <li>
+                I there is a mistake and you forget a bit, it will identify lkhh or lkhc as typos
+              </li>
             </ul>
           </li>
           <li>
@@ -112,7 +115,10 @@
                 encoding
               </li>
               <li>
-                all the easy to confused chars (1 vs. l, 0 vs. O) aren't used
+                all the easy to confuse chars (1 vs. l, 0 vs. O) aren't used
+              </li>
+              <li>
+                there aren't <em data-tooltip="we checked, no offensive words are dxid">voyels</em> either, so no risk that an diid looks like a word
               </li>
             </ul>
           </li>
@@ -124,6 +130,9 @@
               </li>
               <li>you just convert them to dxid when displaying them</li>
               <li>you just convert them to id when the users submit them</li>
+              <li>simple to check from the cli<code>$npx dxid lkhhc</code></li>
+              <li>923 <b>bytes</b> zipped and compressed</div>
+              <li>no dependency, lots of tests</li>
             </ul>
           </li>
         </ol>
