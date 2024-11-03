@@ -168,12 +168,13 @@
         dxidField.ariaInvalid = "false";
       });
 
-      dxidField.addEventListener("blur", (e) => {
-        console.log("blur");
+      idField.addEventListener("focus", () => {
+        idField.placeholder = "";
+        dxidField.placeholder = "";
       });
-
-      idField.addEventListener("blur", (e) => {
-        console.log("blur");
+      dxidField.addEventListener("focus", () => {
+        idField.placeholder = "";
+        dxidField.placeholder = "";
       });
     </script>
   </body>
