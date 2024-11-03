@@ -1,6 +1,6 @@
 {
   "name": "dxid",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "A better and safer way to display your primary keys in urls or to the users",
   "bin": "./index.js",
   "main": "./dist/index.cjs",
@@ -46,7 +46,7 @@
   "bugs": {
     "url": "https://github.com/tttp/dxid/issues"
   },
-  "homepage": "https://github.com/tttp/dxid#readme",
+  "homepage": "https://dxid.tttp.eu",
   "devDependencies": {
     "ava": "^5.3.1",
     "esbuild": "^0.19.2",
