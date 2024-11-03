@@ -107,26 +107,24 @@ export const stringify = (number, addUnderscore) => {
 };
 
 export const parse = (ubase32, throwError) => {
-  let base32 = undefined;
-  let luhn = undefined;
+  if (throwError === false && Number(ubase32)) {
+    return Number(ubase32);
+  }
+  const base32 = normalize(ubase32);
+  const checksum = base32[0];
+  const payload = base32.substring(1);
+  let luhn;
   try {
-    base32 = normalize(ubase32);
+    luhn = luhn32(payload);
   } catch (e) {
     if (throwError === false) {
-      return Number (ubase32) || false;
+      return false;
     }
     throw e;
   }
-  const checksum = base32[0];
-  const payload = base32.substring(1);
-  try {
-    luhn = luhn32(payload);
-  } catch (d) {
-    if (throwError) throw e;
-  }
   if (luhn !== checksum || base32.length < 2) {
     if (throwError === false) {
-      return Number (ubase32) || false;
+      return false;
     }
     throw new RangeError('invalid dxid');
   }

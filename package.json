@@ -1,6 +1,6 @@
 {
   "name": "dxid",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "A better and safer way to display your primary keys in urls or to the users",
   "bin": "./index.js",
   "main": "./dist/index.cjs",
