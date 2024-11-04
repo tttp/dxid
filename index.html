@@ -172,7 +172,7 @@
 
       idField.addEventListener("input", (e) => {
         const id = e.target.value.trim();
-        dxidField.value = dxid.stringify(+id);
+        dxidField.value = id ? dxid.stringify(+id) : '';
         document.location.hash = dxidField.value;
         dxidField.ariaInvalid = "false";
       });
