@@ -10,12 +10,16 @@
         box-shadow: lightgrey 0 2px 3px;
         background: rgba(238, 238, 238, 0.9);
         width: 100%;
-        position:fixed;
+        position: fixed;
         padding: 0;
       }
 
-      main {border-top: transparent solid 120px;}
-
+      main {
+        border-top: transparent solid 120px;
+      }
+      a#dxid {
+        text-decoration: none;
+      }
     </style>
     <title>Understanding DXID Identifiers</title>
   </head>
@@ -52,8 +56,8 @@
       <p>
         dxid is an easier way to identify all the things stored in your
         application. <br />
-        Instead of using numbers like Action <b>#13672</b>, you&#39;ll use
-        shorter codes like Action <a href="#prpl"><b>prpl</b></a>
+        Instead of using numbers like Action <b id="id">#13672</b>, you&#39;ll
+        use shorter codes like Action <b><a id="dxid" href="#prpl">prpl</a></b>
       </p>
 
       <article>
@@ -94,7 +98,14 @@
             <ul>
               <li>Easier to read, write, and remember</li>
               <li>Less prone to copy/paste errors</li>
-              <li>Built-in <em data-tooltip="the first digit is a checksum, like for credit cards or IBANs">error detection</em> to catch typos</li>
+              <li>
+                Built-in
+                <em
+                  data-tooltip="the first digit is a checksum, like for credit cards or IBANs"
+                  >error detection</em
+                >
+                to catch typos
+              </li>
             </ul>
           </li>
           <li>
@@ -109,7 +120,8 @@
                 <a href="#lkhhc">lkhhc</a>&quot; (shorter and catches typos)
               </li>
               <li>
-                If there is a mistake and you forget a char, it will correctly identify lkhh or lkhc as typos
+                If there is a mistake and you forget a char, it will correctly
+                identify lkhh or lkhc as typos
               </li>
             </ul>
           </li>
@@ -124,7 +136,13 @@
                 all the easy to confuse chars (1 vs. l, 0 vs. O) aren't used
               </li>
               <li>
-                there aren't <em data-tooltip="well, there is y">voyels</em> either, so no risk that an diid looks <em data-tooltip="we checked, no offensive words in 48 languages">like a word</em>
+                there aren't
+                <em data-tooltip="well, there is y">voyels</em> either, so no
+                risk that an diid looks
+                <em
+                  data-tooltip="we checked, no offensive words in 48 languages"
+                  >like a word</em
+                >
               </li>
             </ul>
           </li>
@@ -137,7 +155,7 @@
               <li>you just convert them to dxid when displaying them</li>
               <li>you just convert them to id when the users submit them</li>
               <li>simple to check from the cli<code>$npx dxid lkhhc</code></li>
-              <li>923 <b>bytes</b> zipped and compressed</div>
+              <li>923 <b>bytes</b> zipped and compressed</li>
               <li>no dependency, lots of tests</li>
             </ul>
           </li>
@@ -178,7 +196,7 @@
 
       idField.addEventListener("input", (e) => {
         const id = e.target.value.trim();
-        dxidField.value = id ? dxid.stringify(+id) : '';
+        dxidField.value = id ? dxid.stringify(+id) : "";
         document.location.hash = dxidField.value;
         dxidField.ariaInvalid = "false";
       });
@@ -191,6 +209,28 @@
         idField.placeholder = "";
         dxidField.placeholder = "";
       });
+
+      const example = (digitLength) => {
+        const min = Math.pow(10, digitLength - 1);
+        const max = Math.pow(10, digitLength) - 1;
+        const randomValue = Math.floor(Math.random() * (max - min + 1)) + min;
+        const randomdxid = dxid.stringify(randomValue); // stringify  takes an id and returns a dxid
+        //const randomValue = dxid.parse(randomdxid,false); // parse takes a dxid and returns an id
+        document.getElementById("id").textContent = "#" + randomValue;
+        document.getElementById("dxid").textContent = randomdxid;
+        document.getElementById("dxid").href = "#" + randomdxid;
+        if (idField.placeholder != "") {
+          dxidField.placeholder = randomdxid;
+          idField.placeholder = randomValue;
+        }
+      };
+
+      example(5);
+
+      setInterval(() => {
+        const digitLength = Math.floor(Math.random() * 10) + 3;
+        example(digitLength);
+      }, 5000);
     </script>
   </body>
 </html>
