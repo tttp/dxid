@@ -172,13 +172,14 @@
         const hash = window.location.hash;
         if (hash) {
           const _dxid = hash.substring(1); // Remove the # character
-          if (dxidField.value === _dxid) return;
+          if (dxidField.value === _dxid || !dxid.parse(_dxid,false)) return;
 
           dxidField.value = _dxid;
           dxidField.dispatchEvent(new Event("input", { bubbles: true }));
         }
       }
 
+      handleHash();
       window.addEventListener("hashchange", handleHash);
 
       dxidField.addEventListener("input", (e) => {
