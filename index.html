@@ -172,27 +172,29 @@
         const hash = window.location.hash;
         const _dxid = hash.substring(1); // Remove the # character
 
-
-          if (!_dxid || dxidField.value === _dxid || idField.value === _dxid) return;
-
+          if (!_dxid) return;
           if (!isNaN(_dxid) ) { //it's an id, not a dxid
             idField.value = _dxid;
-            idField.ariaInvalid = "false";
             idField.dispatchEvent(new Event("input", { bubbles: true }));
             return;
           }
           dxidField.value = _dxid;
           if (dxid.parse(_dxid,false)) {
+            touched = true;
             dxidField.dispatchEvent(new Event("input", { bubbles: true }));
           }  else {
             idField.value = "";
             dxidField.ariaInvalid = "true";
+            dxidField.dispatchEvent(new Event("input", { bubbles: true }));
           }
 
 
       }
-
-      handleHash();
+ 
+      setTimeout(() => {
+        handleHash();
+        !touched && example(5);
+      }, 10);
       window.addEventListener("hashchange", handleHash);
 
       dxidField.addEventListener("input", (e) => {
@@ -205,6 +207,7 @@
         } catch (e) {
           console.log(e.toString());
           idField.value = "";
+          idField.placeholder = "";
           dxidField.ariaInvalid = "true";
         }
       });
@@ -241,7 +244,6 @@
         }
       };
 
-      example(5);
 
       setInterval(() => {
         if (touched) return;
