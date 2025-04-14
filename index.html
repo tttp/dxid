@@ -164,25 +164,32 @@
     </main>
     <script type="module">
       import dxid from "./src/dxid.js";
-
+      let touched = false; 
       const dxidField = document.querySelector('input[name="dxid"]');
       const idField = document.querySelector('input[name="id"]');
 
       function handleHash() {
         const hash = window.location.hash;
-        if (hash) {
-          const _dxid = hash.substring(1); // Remove the # character
+        const _dxid = hash.substring(1); // Remove the # character
 
-          if (!isNaN(_dxid)) { //it's an id, not a dxid
+
+          if (!_dxid || dxidField.value === _dxid || idField.value === _dxid) return;
+
+          if (!isNaN(_dxid) ) { //it's an id, not a dxid
             idField.value = _dxid;
+            idField.ariaInvalid = "false";
             idField.dispatchEvent(new Event("input", { bubbles: true }));
             return;
           }
-          if (dxidField.value === _dxid || !dxid.parse(_dxid,false)) return;
-
           dxidField.value = _dxid;
-          dxidField.dispatchEvent(new Event("input", { bubbles: true }));
-        }
+          if (dxid.parse(_dxid,false)) {
+            dxidField.dispatchEvent(new Event("input", { bubbles: true }));
+          }  else {
+            idField.value = "";
+            dxidField.ariaInvalid = "true";
+          }
+
+
       }
 
       handleHash();
@@ -190,6 +197,7 @@
 
       dxidField.addEventListener("input", (e) => {
         const value = e.target.value.trim();
+        touched = true;
         try {
           idField.value = dxid.parse(value);
           dxidField.ariaInvalid = "false";
@@ -202,6 +210,7 @@
       });
 
       idField.addEventListener("input", (e) => {
+        touched = true;
         const id = e.target.value.trim();
         dxidField.value = id ? dxid.stringify(+id) : "";
         document.location.hash = idField.value;
@@ -235,6 +244,7 @@
       example(5);
 
       setInterval(() => {
+        if (touched) return;
         const digitLength = Math.floor(Math.random() * 10) + 3;
         example(digitLength);
       }, 5000);
