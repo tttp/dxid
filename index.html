@@ -172,6 +172,12 @@
         const hash = window.location.hash;
         if (hash) {
           const _dxid = hash.substring(1); // Remove the # character
+
+          if (!isNaN(_dxid)) { //it's an id, not a dxid
+            idField.value = _dxid;
+            idField.dispatchEvent(new Event("input", { bubbles: true }));
+            return;
+          }
           if (dxidField.value === _dxid || !dxid.parse(_dxid,false)) return;
 
           dxidField.value = _dxid;
@@ -198,7 +204,7 @@
       idField.addEventListener("input", (e) => {
         const id = e.target.value.trim();
         dxidField.value = id ? dxid.stringify(+id) : "";
-        document.location.hash = dxidField.value;
+        document.location.hash = idField.value;
         dxidField.ariaInvalid = "false";
       });
 
