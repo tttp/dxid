@@ -164,6 +164,7 @@
     </main>
     <script type="module">
       import dxid from "./src/dxid.js";
+
       let touched = false; 
       const dxidField = document.querySelector('input[name="dxid"]');
       const idField = document.querySelector('input[name="id"]');
@@ -173,7 +174,7 @@
         const _dxid = hash.substring(1); // Remove the # character
 
           if (!_dxid) return;
-          if (!isNaN(_dxid) ) { //it's an id, not a dxid
+          if (!Number.isNaN(_dxid) ) { //it's an id, not a dxid
             idField.value = _dxid;
             idField.dispatchEvent(new Event("input", { bubbles: true }));
             return;
@@ -230,15 +231,15 @@
       });
 
       const example = (digitLength) => {
-        const min = Math.pow(10, digitLength - 1);
-        const max = Math.pow(10, digitLength) - 1;
+        const min = 10 ** (digitLength - 1);
+        const max = 10 ** digitLength - 1;
         const randomValue = Math.floor(Math.random() * (max - min + 1)) + min;
         const randomdxid = dxid.stringify(randomValue); // stringify  takes an id and returns a dxid
         //const randomValue = dxid.parse(randomdxid,false); // parse takes a dxid and returns an id
-        document.getElementById("id").textContent = "#" + randomValue;
+        document.getElementById("id").textContent = `#${randomValue}`;
         document.getElementById("dxid").textContent = randomdxid;
-        document.getElementById("dxid").href = "#" + randomdxid;
-        if (idField.placeholder != "") {
+        document.getElementById("dxid").href = `#${randomdxid}`;
+        if (idField.placeholder !== "") {
           dxidField.placeholder = randomdxid;
           idField.placeholder = randomValue;
         }

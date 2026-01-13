@@ -1,6 +1,6 @@
 {
   "name": "dxid",
-  "version": "2.2.1",
+  "version": "2.3.0",
   "description": "A better and safer way to display your primary keys in urls or to the users",
   "bin": "./index.js",
   "main": "./dist/index.cjs",
@@ -10,7 +10,7 @@
     ".": {
       "require": "./dist/index.cjs",
       "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
+      "types": "./index.d.ts"
     }
   },
   "run": {
@@ -22,7 +22,9 @@
     "id": "./index.js",
     "dxid": "./index.js",
     "test": "ava",
-    "eslint": "npx eslint src --fix"
+    "lint": "npx biome lint --fix",
+    "format": "npx biome format --fix",
+    "check": "npx biome check --fix"
   },
   "files": [
     "src",
@@ -48,6 +50,7 @@
   },
   "homepage": "https://dxid.tttp.eu",
   "devDependencies": {
+    "@biomejs/biome": "^2.3.11",
     "ava": "^5.3.1",
     "esbuild": "^0.19.2",
     "eslint": "^8.47.0",

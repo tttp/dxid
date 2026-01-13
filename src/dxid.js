@@ -13,8 +13,8 @@
 // convert to and from base32 inspired by number-to-base32 (MIT)
 // const base32Chars = '0123456789abcdefghjkmnpqrstvwxyz'; // croford
 // const base32Chars   = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567'; // rfc 4648
-const base32Chars = 'bcdfghjklmnpqrstvwxyz_0123456789'; // lowercase without the most common voyels
-const separator = '-'; // can be inserted into dxid, to partition into manageable pieces and improve readability. ignored during decoding
+const base32Chars = "bcdfghjklmnpqrstvwxyz_0123456789"; // lowercase without the most common voyels
+const separator = "-"; // can be inserted into dxid, to partition into manageable pieces and improve readability. ignored during decoding
 
 // string to binary lookup table
 // 123 == 'z'.charCodeAt(0) + 1
@@ -23,10 +23,11 @@ for (let i = 0; i < base32Chars.length; i++) {
   s2b[base32Chars.charCodeAt(i)] = i;
 }
 
-export const normalize = (dxid) => (
+export const normalize = (dxid) =>
   // remove aeiou ? should we ignore instead of crashing if voyel?
-  dxid.replaceAll(separator, '').toLowerCase()
-);
+  dxid
+    .replaceAll(separator, "")
+    .toLowerCase();
 
 export const luhn32 = (base32url) => {
   let sum = 0;
@@ -63,7 +64,7 @@ export const encode32 = (id) => {
     return base32Chars[id];
   }
 
-  let base32String = '';
+  let base32String = "";
   let number = id;
   while (number > 0) {
     const digit = number % 32;
@@ -87,14 +88,15 @@ export const decode32 = (base32) => {
 
 export const stringify = (number, addUnderscore) => {
   if (!Number.isSafeInteger(number)) {
-    if (typeof number !== 'number') throw new Error(`The id must be an integer, not a ${typeof number}`);
+    if (typeof number !== "number")
+      throw new Error(`The id must be an integer, not a ${typeof number}`);
 
     throw new RangeError(
       `The id must be smaller than safe integer <${Number.MAX_SAFE_INTEGER}`,
     );
   }
   if (number < 0) {
-    throw new RangeError('The id must be positive');
+    throw new RangeError("The id must be positive");
   }
   const payload = encode32(number);
   const dxid = luhn32(payload) + payload;
@@ -126,13 +128,14 @@ export const parse = (ubase32, throwError) => {
     if (throwError === false) {
       return false;
     }
-    throw new RangeError('invalid dxid');
+    throw new RangeError("invalid dxid");
   }
   const id = decode32(payload);
   if (!Number.isSafeInteger(id)) {
     throw new RangeError(
       `dxid too long, the id would be greater than safe integer > ${
-        Number.MAX_SAFE_INTEGER}`,
+        Number.MAX_SAFE_INTEGER
+      }`,
     );
   }
   return decode32(payload);

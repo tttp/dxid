@@ -12,11 +12,11 @@ const readable = (word) => {
   };
 
   const cs = word[0];
-  const input = word.substring(1); //.toUpperCase();
+  const input = word.substring(1); // .toUpperCase();
   check(input, cs);
 };
 
-const permute = (word) => {
+const _permute = (word) => {
   const upper = word[0].toUpperCase();
   const lower = word[0].toLowerCase();
 
@@ -37,21 +37,24 @@ const permute = (word) => {
   }
 };
 
-test(`testing naughty words dxid`, async (t) => {
-  const known = "sm l0rt d1ck s3x0 p0p3l k1nky b1tch 1ng010 3r0t1c p0kk3r f1g0n3 schl0ng t0pl3ss r1mm1ng p3nd3j0 bl0w_j0b 0pr0tt3n kyrv1tys b0ll0cks sch13ss3r m1nch10n3 gr3pp3ld3l h0w_t0_k1ll l13fd3sgr0t";
+test("testing naughty words dxid", async (t) => {
+  const known =
+    "sm l0rt d1ck s3x0 p0p3l k1nky b1tch 1ng010 3r0t1c p0kk3r f1g0n3 schl0ng t0pl3ss r1mm1ng p3nd3j0 bl0w_j0b 0pr0tt3n kyrv1tys b0ll0cks sch13ss3r m1nch10n3 gr3pp3ld3l h0w_t0_k1ll l13fd3sgr0t";
   let allWords = extrabw;
   t.is(Object.keys(words).length, 28, "how many languages");
 
-  Object.values(words).forEach((d) => (allWords = [].concat(allWords, d)));
+  Object.values(words).forEach((d) => {
+    allWords = [].concat(allWords, d);
+  });
 
   //  const allWords = [].concat(words.en,extrabw);
-  let bw = [];
+  const bw = [];
   for (let i = 0; i <= 12; i++) {
     bw[i] = [];
   }
   allWords.forEach((word) => {
-    const length = word.length;
-    if (length > 12) return; //dcid max 12
+    const { length } = word;
+    if (length > 12) return; // dcid max 12
     const d = word
       .trim()
       .replaceAll(" ", "_")
@@ -70,10 +73,10 @@ test(`testing naughty words dxid`, async (t) => {
     bw[i].forEach((d) => {
       if (!d) return;
       try {
-        //permute(d);
+        // permute(d);
         readable(d);
-      } catch (e) {
-        //console.log(d);
+      } catch (_e) {
+        // console.log(d);
         // words with I L O U aren't dxid
       }
     });
@@ -84,15 +87,15 @@ test(`testing naughty words dxid`, async (t) => {
     .sort((a, b) => a - b)
     .forEach((id) => {
       try {
-//        console.log(id, stringify(id));
+        //        console.log(id, stringify(id));
         naughty.push(stringify(id));
-      } catch (e) {}
+      } catch (_e) {}
     });
 
-  //t.is(profaneID.size,24,"profane words found "+ Array.from(profaneID).join(" "));
-  t.is(profaneID.size,24,"profane words found "+ naughty.join(","));
-  t.is(known,naughty.join(" "),"known naughty words only");
-//  console.log(naughty.join(" "));
-  //console.log(bw);
-  //console.log(allWords);
+  // t.is(profaneID.size,24,"profane words found "+ Array.from(profaneID).join(" "));
+  t.is(profaneID.size, 24, `profane words found ${naughty.join(",")}`);
+  t.is(known, naughty.join(" "), "known naughty words only");
+  //  console.log(naughty.join(" "));
+  // console.log(bw);
+  // console.log(allWords);
 });
