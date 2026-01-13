@@ -5,14 +5,14 @@
   "bin": "./index.js",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
-  "types": "./index.d.ts",
   "exports": {
     ".": {
+      "types": "./index.d.ts",
       "require": "./dist/index.cjs",
-      "import": "./dist/index.mjs",
-      "types": "./index.d.ts"
+      "import": "./dist/index.mjs"
     }
   },
+  "types": "./index.d.ts",
   "run": {
     "dxid": "./index.js"
   },
@@ -52,7 +52,7 @@
   "devDependencies": {
     "@biomejs/biome": "^2.3.11",
     "ava": "^6.4.1",
-    "esbuild": "^0.19.2",
+    "esbuild": "^0.27.2",
     "naughty-words": "^1.2.0"
   }
 }
