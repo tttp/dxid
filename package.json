@@ -2,7 +2,9 @@
   "name": "dxid",
   "version": "2.3.0",
   "description": "A better and safer way to display your primary keys in urls or to the users",
-  "bin": "./index.js",
+  "bin": {
+    "dxid": "index.js"
+  },
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "exports": {
