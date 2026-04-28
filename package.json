@@ -53,7 +53,7 @@
   "homepage": "https://dxid.tttp.eu",
   "devDependencies": {
     "@biomejs/biome": "^2.3.11",
-    "ava": "^7.0.0",
+    "ava": "^8.0.0",
     "esbuild": "^0.28.0",
     "naughty-words": "^1.2.0"
   }
